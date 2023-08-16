@@ -1,0 +1,43 @@
+comp="C:/Users/Work_KJF82"
+#comp="C:/Users/kjfras16"
+library(YEPaux)
+#devtools::load_all(path=paste(comp,"Documents/Git repositories/YEP",sep="/"))
+
+{
+  dir1a="Documents/0 - Yellow fever model MCMC results/Model runs 2022-10"
+  dir1b="Run2022_10_C_case_sero_272regions_newCFR"
+  dir2="Documents/0 - R files/YEP + YFD - Indian Ocean countries new calculations"
+  
+  input_data=readRDS(file=paste(comp,dir2,"exdata/input_data_IAregions.Rds",sep="/"))
+  enviro_data=read.csv(file=paste(comp,dir2,"exdata/enviro_data_IAregions_6covs_old_labelling_ts_error.csv",sep="/"),header=TRUE)
+  regions=input_data$region_labels
+  n_regions=length(regions)
+  assertthat::assert_that(all(regions==enviro_data$region))
+  n_env_vars=ncol(enviro_data)-1
+  env_vars=colnames(enviro_data)[1+c(1:n_env_vars)]
+}
+
+chain_data_combined=readRDS(file=paste(comp,dir1a,dir1b,"chain_data_combined.Rds",sep="/"))
+
+#Re-ordering environmental data
+enviro_data2=enviro_data
+enviro_cols_chain_order=c("region","logpop","temp_suit_mean","LC10","aegypti","MIR.max","monkeys_combined")
+enviro_data2=enviro_data[,match(enviro_cols_chain_order,colnames(enviro_data))]
+env_vars2=colnames(enviro_data2)[1+c(1:n_env_vars)]
+
+assertthat::assert_that(all(colnames(chain_data_combined)[1+c(1:n_env_vars)]==paste("FOI_",env_vars2,sep="")),msg="")
+assertthat::assert_that(all(colnames(chain_data_combined)[1+n_env_vars+c(1:n_env_vars)]==paste("R0_",env_vars2,sep="")),msg="")
+
+n_param_sets=1000
+n_entries=nrow(chain_data_combined)
+interval=floor(n_entries/n_param_sets)
+lines=c(1:n_param_sets)*interval
+chain_data_selected=chain_data_combined[lines,]
+FOI_R0_values=get_mcmc_FOI_R0_data(chain_data_selected,type="FOI+R0 enviro",enviro_data2)
+
+FOI_values_array=array(data=FOI_R0_values$FOI,dim=c(n_regions,n_param_sets))
+R0_values_array=array(data=FOI_R0_values$R0,dim=c(n_regions,n_param_sets))
+
+saveRDS(list(regions=regions,FOI_values=FOI_values_array,R0_values=R0_values_array,
+             vaccine_efficacy=chain_data_selected$vaccine_efficacy,p_rep_severe=chain_data_selected$p_rep_severe,
+             p_rep_death=chain_data_selected$p_rep_death),file=paste(comp,dir2,"exdata/DSY_1000_datasets.Rds",sep="/"))

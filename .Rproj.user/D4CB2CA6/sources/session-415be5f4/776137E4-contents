@@ -1,0 +1,36 @@
+#comp="C:/Users/kjfras16"
+comp="C:/Users/Work_KJF82"
+library(YEP)
+
+dir1="Documents/0 - R files/YEP + YFD - Indian Ocean countries new calculations"
+dir2=paste("Documents/00 - Big data files to back up infrequently","00 - YellowFeverDynamics key datasets",sep="/")
+
+#Data
+enviro_data1=read.csv(file=paste(comp,dir2,"enviro_data_all2.csv",sep="/"),header=TRUE)
+enviro_data2=read.csv(file=paste(comp,dir2,"enviro_data_asia_selected_all_covs.csv",sep="/"),header=TRUE)
+enviro_glm=read.csv(file=paste(comp,dir2,"enviro_glm_6covs_old_labelling.csv",sep="/"),header=TRUE)
+
+countries=c("DJI","SOM","YEM")
+
+enviro_data1=enviro_data1[,colnames(enviro_data1) %in% c("region",colnames(enviro_glm)[enviro_glm==TRUE])]
+enviro_data2=enviro_data2[,colnames(enviro_data2) %in% c("adm1",colnames(enviro_glm)[enviro_glm==TRUE])]
+enviro_data2=enviro_data2[,order(colnames(enviro_data2))]
+colnames(enviro_data2)[colnames(enviro_data2)=="adm1"]="region"
+
+enviro_data=rbind(enviro_data1,enviro_data2)
+
+enviro_data=enviro_data[substr(enviro_data$region,1,3) %in% countries,]
+enviro_data=enviro_data[order(enviro_data$region),]
+enviro_data$MIR.max=as.numeric(enviro_data$MIR.max)
+colnames(enviro_data)[colnames(enviro_data)=="temp_mean"]="temp_suit_mean" #Duplicating old  error to mesh with MCMC results
+n_env_vars=ncol(enviro_data)-1
+
+regions=enviro_data$region
+n_regions=length(regions)
+case_data_dummy=data.frame(region=regions,year=rep(2018,n_regions),cases=rep(0,n_regions),deaths=rep(0,n_regions))
+  
+input_data_all=readRDS(file=paste(comp,dir1,"exdata/input_data_DSY_1940_2050.Rds",sep="/"))
+input_data=input_data_process(input_data_all,NULL,case_data_dummy)
+
+write.csv(enviro_data,file=paste(comp,dir1,"exdata/enviro_data_IAregions_6covs_old_labelling.csv",sep="/"),row.names=FALSE)
+saveRDS(input_data,file=paste(comp,dir1,"exdata/input_data_IAregions.Rds",sep="/"))

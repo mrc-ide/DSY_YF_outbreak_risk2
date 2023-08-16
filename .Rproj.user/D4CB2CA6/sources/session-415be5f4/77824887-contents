@@ -1,0 +1,65 @@
+library(YEPaux)
+
+{
+  dir1a="Documents/0 - Yellow fever model MCMC results/Model runs 2022-10"
+  dir1b="Run2022_10_C_case_sero_272regions_newCFR"
+  dir2="Documents/0 - R files/YEP + YFD - Indian Ocean countries new calculations"
+
+  input_data=readRDS(file=paste(comp,dir2,"exdata/input_data_IAregions.Rds",sep="/"))
+  enviro_data=read.csv(file=paste(comp,dir2,"exdata/enviro_data_IAregions_6covs_old_labelling_ts_error.csv",sep="/"),header=TRUE)
+  regions=input_data$region_labels
+  n_regions=length(regions)
+  assertthat::assert_that(all(regions==enviro_data$region))
+  n_env_vars=ncol(enviro_data)-1
+  env_vars=colnames(enviro_data)[1+c(1:n_env_vars)]
+}
+
+chain_data_combined=readRDS(file=paste(comp,dir1a,dir1b,"chain_data_combined.Rds",sep="/"))
+
+#Re-ordering environmental data
+enviro_data2=enviro_data
+enviro_cols_chain_order=c("region","logpop","temp_suit_mean","LC10","aegypti","MIR.max","monkeys_combined")
+enviro_data2=enviro_data[,match(enviro_cols_chain_order,colnames(enviro_data))]
+env_vars2=colnames(enviro_data2)[1+c(1:n_env_vars)]
+
+# Renaming to be used if environmental covariates re-labelled
+# colnames(chain_data_combined)[colnames(chain_data_combined)=="FOI_monkeys_combined"]="FOI_nhps_combined"
+# colnames(chain_data_combined)[colnames(chain_data_combined)=="R0_monkeys_combined"]="R0_nhps_combined"
+# colnames(chain_data_combined)[colnames(chain_data_combined)=="FOI_temp_suit_mean"]="FOI_temp_mean"
+# colnames(chain_data_combined)[colnames(chain_data_combined)=="R0_temp_suit_mean"]="R0_temp_mean"
+
+assertthat::assert_that(all(colnames(chain_data_combined)[1+c(1:n_env_vars)]==paste("FOI_",env_vars2,sep="")),msg="")
+assertthat::assert_that(all(colnames(chain_data_combined)[1+n_env_vars+c(1:n_env_vars)]==paste("R0_",env_vars2,sep="")),msg="")
+n_entries=nrow(chain_data_combined)
+FOI_R0_values=get_mcmc_FOI_R0_data(chain_data_combined,type="FOI+R0 enviro",enviro_data2)
+
+blank=rep(NA,n_regions)
+FOI_R0_summary=data.frame(region=regions,
+                          FOI_025=blank,FOI_25=blank,FOI_50=blank,FOI_75=blank,FOI_975=blank,FOI_mean=blank,FOI_cv=blank,
+                          R0_025=blank,R0_25=blank,R0_50=blank,R0_75=blank,R0_975=blank,R0_mean=blank,R0_cv=blank)
+n_025=ceiling(n_entries*0.025)
+n_25=ceiling(n_entries*0.25)
+n_75=floor(n_entries*0.75)
+n_975=floor(n_entries*0.975)
+for(i in 1:n_regions){
+  lines=i+(n_regions*c(0:(n_entries-1)))
+  FOI_values=sort(FOI_R0_values$FOI[lines])
+  R0_values=sort(FOI_R0_values$R0[lines])
+  FOI_R0_summary$FOI_025[i]=FOI_values[n_025]
+  FOI_R0_summary$FOI_25[i]=FOI_values[n_25]
+  FOI_R0_summary$FOI_50[i]=median(FOI_values)
+  FOI_R0_summary$FOI_75[i]=FOI_values[n_75]
+  FOI_R0_summary$FOI_975[i]=FOI_values[n_975]
+  FOI_R0_summary$FOI_mean[i]=mean(FOI_values)
+  FOI_R0_summary$FOI_cv[i]=sqrt(var(FOI_values))/mean(FOI_values)
+  FOI_R0_summary$R0_025[i]=R0_values[n_025]
+  FOI_R0_summary$R0_25[i]=R0_values[n_25]
+  FOI_R0_summary$R0_50[i]=median(R0_values)
+  FOI_R0_summary$R0_75[i]=R0_values[n_75]
+  FOI_R0_summary$R0_975[i]=R0_values[n_975]
+  FOI_R0_summary$R0_mean[i]=mean(R0_values)
+  FOI_R0_summary$R0_cv[i]=sqrt(var(R0_values))/mean(R0_values)
+}
+#saveRDS(FOI_R0_values,file=paste(comp,dir2,"exdata/FOI_R0_datasets.Rds",sep="/"))
+saveRDS(FOI_R0_summary,file=paste(comp,dir2,"exdata/FOI_R0_summary.Rds",sep="/"))
+write.csv(FOI_R0_summary,file=paste(comp,dir2,"exdata/DSY_FOI_R0_summary.csv",sep="/"),row.names=FALSE)

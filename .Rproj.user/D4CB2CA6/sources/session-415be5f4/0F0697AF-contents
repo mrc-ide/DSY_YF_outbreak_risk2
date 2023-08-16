@@ -1,0 +1,48 @@
+#Version of case data generation with no spillover and single seeded case at start of first year
+#comp="C:/Users/Work_KJF82"
+comp="C:/Users/kjfras16"
+#devtools::load_all(paste(comp,"Documents/Git repositories/YEP",sep="/"))
+library(YEP)
+setwd(paste(comp,"Documents/0 - R files/YEP + YFD - Indian Ocean countries new calculations",sep="/"))
+
+{
+  input_data=readRDS(file="exdata/input_data_DSY_2022_2050.Rds")
+  datasets=readRDS(file="exdata/DSY_1000_datasets.Rds")
+  assertthat::assert_that(all(datasets$regions==input_data$region_labels))
+  regions=input_data$region_labels
+  n_regions=length(regions)
+  n_param_sets=length(datasets$vaccine_efficacy)
+}
+
+years_data=c(2023)
+n_years=length(years_data)
+years_input_required=c(years_data[1]:(max(years_data)+1))
+n_years_input_required=c(1:length(input_data$years_labels))[input_data$years_labels %in% years_input_required]
+
+input_data_reduced=list(region_labels=input_data$region_labels,years_labels=input_data$years_labels[n_years_input_required],
+                        age_labels=input_data$age_labels,vacc_data=input_data$vacc_data[,n_years_input_required,],
+                        pop_data=input_data$pop_data[,n_years_input_required,])
+case_template=data.frame(region=sort(rep(regions,n_years)),year=rep(years_data,n_regions),cases=rep(0,n_years*n_regions))
+
+{
+  p_severe_inf=0.12
+  p_death_severe_inf=0.39
+  mode_start=2
+  start_SEIRV=list()
+  for(n_region in 1:n_regions){
+    P0=input_data_reduced$pop_data[n_region,1,]
+    start_SEIRV[[n_region]]=list(S=P0,E=P0*0,I=P0*0,R=P0*0,V=P0*0)
+    start_SEIRV[[n_region]]$E[21]=1
+    start_SEIRV[[n_region]]$S[21]=start_SEIRV[[n_region]]$S[21]-1
+  }
+  dt=5.0
+  n_reps=10
+  deterministic=FALSE
+}
+
+set.seed(1)
+case_data_multi <- Generate_Multiple_Datasets(input_data_reduced,datasets$FOI_values*0.0,datasets$R0_values,NULL,case_template,
+                                              datasets$vaccine_efficacy, p_severe_inf, p_death_severe_inf, 
+                                              p_rep_severe=rep(1.0,n_param_sets),p_rep_death=rep(1.0,n_param_sets),
+                                              mode_start,start_SEIRV, dt,n_reps, deterministic = FALSE,"none",NULL)
+saveRDS(list(regions=regions,cases=case_data_multi$model_case_values),file="results/case_data02.Rds")
