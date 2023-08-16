@@ -1,34 +1,31 @@
 library(YEPaux)
 
 country_list=c("DJI","SOM")
-case_data=readRDS(file="results/case_data02.Rds")
-{
-  regions_all=case_data$region
-  adm2_regions=regions_all[substr(regions_all,1,3) %in% country_list]
-  case_data_selected=list(regions=adm2_regions,cases=case_data$cases[regions_all %in% adm2_regions,])
-  adm1_regions=case_data_selected$regions
-  n_adm1_regions=length(adm1_regions)
-  n_param_sets=dim(case_data_selected$cases)[2]
-  
-  shapefiles1=shapefiles2=rep("",length(country_list))
-  adm2_regions=c()
-  for(i in 1:length(country_list)){
-    shapefiles1[i]=paste("shapefiles/",country_list[i],"/gadm36_",country_list[i],"_1.shp",sep="")
-    shapefiles2[i]=paste("shapefiles/",country_list[i],"/gadm36_",country_list[i],"_2.shp",sep="")
-    shape=sf::read_sf(shapefiles2[i])
-    adm2_regions=append(adm2_regions,shape$GID_2)
-  }
-  n_adm2_regions=length(adm2_regions)
-  shape_data1=map_shapes_load(adm1_regions, shapefiles1, region_label_type="GID_1")
-  shape_data2=map_shapes_load(adm2_regions, shapefiles2, region_label_type="GID_2")
-  colour_scheme=readRDS(file=paste(path.package("YEPaux"), "exdata/colour_scheme_example.Rds", sep="/"))
-  colour_scale=colour_scheme$colour_scale
+case_data=readRDS(file="results/case_data_FOI_R0_10_datasets.Rds")
+case_data_selected=subset(case_data,substr(region,1,3) %in% country_list)
+adm1_regions=unique(case_data_selected$region)
+n_adm1_regions=length(adm1_regions)
+n_param_sets=nrow(case_data_selected)/n_adm1_regions
+cases_array=array(case_data_selected$cases,dim=c(n_adm1_regions,n_param_sets))
+
+shapefiles1=shapefiles2=rep("",length(country_list))
+adm2_regions=c()
+for(i in 1:length(country_list)){
+  shapefiles1[i]=paste("shapefiles/",country_list[i],"/gadm36_",country_list[i],"_1.shp",sep="")
+  shapefiles2[i]=paste("shapefiles/",country_list[i],"/gadm36_",country_list[i],"_2.shp",sep="")
+  shape=sf::read_sf(shapefiles2[i])
+  adm2_regions=append(adm2_regions,shape$GID_2)
 }
+n_adm2_regions=length(adm2_regions)
+shape_data1=map_shapes_load(adm1_regions, shapefiles1, region_label_type="GID_1")
+shape_data2=map_shapes_load(adm2_regions, shapefiles2, region_label_type="GID_2")
+colour_scheme=readRDS(file=paste(path.package("YEPaux"), "exdata/colour_scheme_example.Rds", sep="/"))
+colour_scale=colour_scheme$colour_scale
 
 outbreak_risk_adm1=rep(0,n_adm1_regions)
 for(n_adm1 in 1:n_adm1_regions){
   for(n_param_set in 1:n_param_sets){
-    if(case_data_selected$cases[n_adm1,n_param_set]>=1.0){outbreak_risk_adm1[n_adm1]=outbreak_risk_adm1[n_adm1]+1}
+    if(cases_array[n_adm1,n_param_set]>=1.0){outbreak_risk_adm1[n_adm1]=outbreak_risk_adm1[n_adm1]+1}
   }
   outbreak_risk_adm1[n_adm1]=min(1.0,outbreak_risk_adm1[n_adm1]/n_param_sets)
 }
@@ -52,6 +49,7 @@ for(n_adm2 in 1:n_adm2_regions){
   rel_outbreak_risk_adm2_b[n_adm2]=rt_risk_scores_median_adm2[n_adm2]*outbreak_risk_adm2[n_adm2]
 }
 
+#Checking that adm1 and adm2 outbreak risk maps match
 par(mfrow=c(1,2))
 scale=c(0,0.01,0.05,0.1,0.25,0.5,0.75,0.9,0.95,0.99,1.0)
 create_map(shape_data1,outbreak_risk_adm1,scale=scale,colour_scale,pixels_max=1440,text_size=1,map_title="",
