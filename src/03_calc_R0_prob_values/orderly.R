@@ -39,7 +39,7 @@ R0_prob_data <- dataset %>%
             p_1  = sum(R0>=1)  /n() )
 
 
-country_list=unique(substr(regions,1,3))
+country_list=unique(substr(R0_prob_data$region,1,3))
 shapefiles=rep("",length(country_list))
 for(i in 1:length(country_list)){
   shapefiles[i]=paste0("shapefiles/",country_list[i],"/gadm36_",country_list[i],"_1.shp")
