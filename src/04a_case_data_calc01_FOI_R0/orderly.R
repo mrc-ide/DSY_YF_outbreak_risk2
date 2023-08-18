@@ -3,7 +3,7 @@ orderly2::orderly_dependency(name="01_get_FOI_R0_values_from_saved_chain_data",
                              files=c(DSY_1000_datasets_FOI_R0.Rds="DSY_1000_datasets_FOI_R0.Rds",
                                      DSY_1000_datasets_additional.Rds="DSY_1000_datasets_additional.Rds"))
 
-orderly2::orderly_resource("input_data_DSY_2022_2050.Rds")
+orderly2::orderly_shared_resource("input_data_DSY_2022_2050.Rds"="input_data_DSY_2022_2050.Rds")
 
 orderly2::orderly_artefact("All data", "case_data_FOI_R0_1000_datasets.Rds")
 
