@@ -18,7 +18,7 @@ orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefile
                                   'shapefiles/YEM/gadm36_YEM_1.shp' = 'shapefiles/YEM/gadm36_YEM_1.shp', 
                                   'shapefiles/YEM/gadm36_YEM_1.shx' = 'shapefiles/YEM/gadm36_YEM_1.shx')
 
-#orderly2::orderly_artefact(description="All figures",files="map_p_R0_05.png")
+orderly2::orderly_artefact(description="All figures",files=c("map_p_R0_05.png", "map_p_R0_07.png", "map_p_R0_10.png"))
 
 library(YEPaux)
 library(dplyr)
