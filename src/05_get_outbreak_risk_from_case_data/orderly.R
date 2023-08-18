@@ -1,12 +1,34 @@
+orderly2::orderly_dependency(name="04b_case_data_calc02_R0_case_seeding",
+                             query="latest",
+                             c(case_data_seeded_R0_1000_datasets.Rds="case_data_seeded_R0_1000_datasets.Rds"))
+
+orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefiles/DJI/gadm36_DJI_1.cpg', 
+                                  'shapefiles/DJI/gadm36_DJI_1.dbf' = 'shapefiles/DJI/gadm36_DJI_1.dbf', 
+                                  'shapefiles/DJI/gadm36_DJI_1.prj' = 'shapefiles/DJI/gadm36_DJI_1.prj', 
+                                  'shapefiles/DJI/gadm36_DJI_1.shp' = 'shapefiles/DJI/gadm36_DJI_1.shp', 
+                                  'shapefiles/DJI/gadm36_DJI_1.shx' = 'shapefiles/DJI/gadm36_DJI_1.shx', 
+                                  'shapefiles/SOM/gadm36_SOM_1.cpg' = 'shapefiles/SOM/gadm36_SOM_1.cpg', 
+                                  'shapefiles/SOM/gadm36_SOM_1.dbf' = 'shapefiles/SOM/gadm36_SOM_1.dbf', 
+                                  'shapefiles/SOM/gadm36_SOM_1.prj' = 'shapefiles/SOM/gadm36_SOM_1.prj',
+                                  'shapefiles/SOM/gadm36_SOM_1.shp' = 'shapefiles/SOM/gadm36_SOM_1.shp', 
+                                  'shapefiles/SOM/gadm36_SOM_1.shx' = 'shapefiles/SOM/gadm36_SOM_1.shx', 
+                                  'shapefiles/YEM/gadm36_YEM_1.cpg' = 'shapefiles/YEM/gadm36_YEM_1.cpg', 
+                                  'shapefiles/YEM/gadm36_YEM_1.dbf' = 'shapefiles/YEM/gadm36_YEM_1.dbf', 
+                                  'shapefiles/YEM/gadm36_YEM_1.prj' = 'shapefiles/YEM/gadm36_YEM_1.prj', 
+                                  'shapefiles/YEM/gadm36_YEM_1.shp' = 'shapefiles/YEM/gadm36_YEM_1.shp', 
+                                  'shapefiles/YEM/gadm36_YEM_1.shx' = 'shapefiles/YEM/gadm36_YEM_1.shx')
+
+orderly2::orderly_artefact("All figures", "outbreak risk map (seeding+R0).png")
+
 library(YEPaux)
 
-case_data=readRDS(file="results/case_data_seeded_R0_1000_datasets.Rds")
+case_data=readRDS(file="case_data_seeded_R0_1000_datasets.Rds")
 regions=unique(case_data$region)
 n_regions=length(regions)
 n_param_sets=nrow(case_data)/n_regions
 cases_array=array(case_data$cases,dim=c(n_regions,n_param_sets))
 
-shapefile_folder="Documents/00 - Big data files to back up infrequently/00 - GADM36 shapefiles"
+
 country_list=unique(substr(regions,1,3))
 shapefiles=rep("",length(country_list))
 for(i in 1:length(country_list)){
@@ -27,4 +49,4 @@ colour_scale=colour_scheme$colour_scale
 scale=c(0,0.01,0.05,0.1,0.25,0.5,0.75,0.9,0.95,0.99,1.0)
 create_map(shape_data,outbreak_risk,scale=scale,colour_scale,pixels_max=1440,
            text_size=2,map_title="",legend_title="Outbreak risk",legend_position="bottomright",
-           legend_format="f",legend_dp=2,output_file="maps/outbreak risk map (seeding+R0).png")
+           legend_format="f",legend_dp=2,output_file="outbreak risk map (seeding+R0).png")
