@@ -1,5 +1,9 @@
+orderly2::orderly_dependency(name="01_get_FOI_R0_values_from_saved_chain_data", 
+                             query="latest",
+                             files="DSY_1000_datasets.Rds")
+
 library(YEPaux)
-dataset=readRDS(file="exdata/DSY_1000_datasets.Rds")
+dataset=readRDS(file="DSY_1000_datasets.Rds")
 regions=dataset$regions
 n_regions=length(regions)
 n_entries=dim(dataset$FOI_values)[2]
@@ -25,12 +29,12 @@ scale=c(0,0.01,0.05,0.1,0.25,0.5,0.75,0.9,0.95,0.99,1.0)
 
 create_map(shape_data,R0_prob_data$p_05,scale=scale,colour_scale,pixels_max=1440,
            text_size=2,map_title="",legend_title="P(R0>=0.5)",legend_position="bottomright",
-           legend_format="f",legend_dp=2,output_file="maps/map_p_R0_05.png")
+           legend_format="f",legend_dp=2,output_file="map_p_R0_05.png")
 
 create_map(shape_data,R0_prob_data$p_07,scale=scale,colour_scale,pixels_max=1440,
            text_size=2,map_title="",legend_title="P(R0>=0.7)",legend_position="bottomright",
-           legend_format="f",legend_dp=2,output_file="maps/map_p_R0_07.png")
+           legend_format="f",legend_dp=2,output_file="map_p_R0_07.png")
 
 create_map(shape_data,R0_prob_data$p_1,scale=scale,colour_scale,pixels_max=1440,
            text_size=2,map_title="",legend_title="P(R0>=1.0)",legend_position="bottomright",
-           legend_format="f",legend_dp=2,output_file="maps/map_p_R0_10.png")
+           legend_format="f",legend_dp=2,output_file="map_p_R0_10.png")

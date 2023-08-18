@@ -1,8 +1,28 @@
 orderly2::orderly_dependency(name="01_get_FOI_R0_values_from_saved_chain_data", 
                              query="latest",
-                             files="DSY_1000_datasets_FOI_R0.Rds")
+                             files=c(DSY_1000_datasets_FOI_R0.Rds="DSY_1000_datasets_FOI_R0.Rds"))
 
 
+orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefiles/DJI/gadm36_DJI_1.cpg', 
+                                  'shapefiles/DJI/gadm36_DJI_1.dbf' = 'shapefiles/DJI/gadm36_DJI_1.dbf', 
+                                  'shapefiles/DJI/gadm36_DJI_1.prj' = 'shapefiles/DJI/gadm36_DJI_1.prj', 
+                                  'shapefiles/DJI/gadm36_DJI_1.shp' = 'shapefiles/DJI/gadm36_DJI_1.shp', 
+                                  'shapefiles/DJI/gadm36_DJI_1.shx' = 'shapefiles/DJI/gadm36_DJI_1.shx', 
+                                  'shapefiles/SOM/gadm36_SOM_1.cpg' = 'shapefiles/SOM/gadm36_SOM_1.cpg', 
+                                  'shapefiles/SOM/gadm36_SOM_1.dbf' = 'shapefiles/SOM/gadm36_SOM_1.dbf', 
+                                  'shapefiles/SOM/gadm36_SOM_1.prj' = 'shapefiles/SOM/gadm36_SOM_1.prj',
+                                  'shapefiles/SOM/gadm36_SOM_1.shp' = 'shapefiles/SOM/gadm36_SOM_1.shp', 
+                                  'shapefiles/SOM/gadm36_SOM_1.shx' = 'shapefiles/SOM/gadm36_SOM_1.shx', 
+                                  'shapefiles/YEM/gadm36_YEM_1.cpg' = 'shapefiles/YEM/gadm36_YEM_1.cpg', 
+                                  'shapefiles/YEM/gadm36_YEM_1.dbf' = 'shapefiles/YEM/gadm36_YEM_1.dbf', 
+                                  'shapefiles/YEM/gadm36_YEM_1.prj' = 'shapefiles/YEM/gadm36_YEM_1.prj', 
+                                  'shapefiles/YEM/gadm36_YEM_1.shp' = 'shapefiles/YEM/gadm36_YEM_1.shp', 
+                                  'shapefiles/YEM/gadm36_YEM_1.shx' = 'shapefiles/YEM/gadm36_YEM_1.shx')
+
+
+orderly2::orderly_artefact("All figures", c('FOI_map2_5pc.png', 'FOI_map25pc.png', 'FOI_map50pc.png', 'FOI_map75pc.png', 
+                                            'FOI_map97_5pc.png', 'FOI_mapmean.png', 'R0_map2_5pc.png', 
+                                            'R0_map25pc.png', 'R0_map50pc.png', 'R0_map75pc.png', 'R0_map97_5pc.png', 'R0_mapmean.png'))
 
 library(YEPaux)
 country_list=c("DJI","SOM","YEM")
