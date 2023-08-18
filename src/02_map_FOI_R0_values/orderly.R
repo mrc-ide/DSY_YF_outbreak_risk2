@@ -1,7 +1,13 @@
+orderly2::orderly_dependency(name="01_get_FOI_R0_values_from_saved_chain_data", 
+                             query="latest",
+                             files="DSY_1000_datasets_FOI_R0.Rds")
+
+
+
 library(YEPaux)
 country_list=c("DJI","SOM","YEM")
 
-dataset=readRDS(file="exdata/DSY_1000_datasets_FOI_R0.Rds")
+dataset=readRDS(file="DSY_1000_datasets_FOI_R0.Rds")
 FOI_R0_dist_data=YEPaux::get_FOI_R0_dist_data(dataset)
 
 FOI_R0_dist_data[,c(3:8)]=FOI_R0_dist_data[,c(3:8)]*365.0 #Convert daily FOI to annual FOI
@@ -26,12 +32,14 @@ for(data_select in 1:6){
   FOI_values=FOI_R0_dist_data[,2+data_select]
   R0_values=FOI_R0_dist_data[,9+data_select]
   
-  create_map(shape_data,FOI_values,scale=scale_FOI,colour_scale,pixels_max=720,
-             text_size=1,map_title="",legend_title="Spillover force of infection (annual)",legend_position="bottomright",
-             legend_format="e",legend_dp=1,output_file=paste0("maps/FOI_map",data_type,".png"))
+  YEPaux::create_map(shape_data,FOI_values,scale=scale_FOI,colour_scale,pixels_max=720,
+                     text_size=1,map_title="",legend_title="Spillover force of infection (annual)",legend_position="bottomright",
+                     legend_format="e",legend_dp=1,output_file=paste0("FOI_map",data_type,".png"))
   
-  create_map(shape_data,R0_values,scale=scale_R0,colour_scale,pixels_max=720,
-             text_size=1,map_title="",legend_title="Basic reproduction number",legend_position="bottomright",
-             legend_format="f",legend_dp=1,output_file=paste0("maps/R0_map",data_type,".png"))
+  
+  YEPaux::create_map(shape_data,R0_values,scale=scale_R0,colour_scale,pixels_max=720,
+                     text_size=1,map_title="",legend_title="Basic reproduction number",legend_position="bottomright",
+                     legend_format="f",legend_dp=1,output_file=paste0("R0_map",data_type,".png"))
+  
   
 }
