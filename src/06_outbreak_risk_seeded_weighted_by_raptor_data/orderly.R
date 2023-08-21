@@ -1,7 +1,46 @@
+orderly2::orderly_dependency(name="04a_case_data_calc01_FOI_R0",
+                             query="latest",
+                             files=c(case_data_FOI_R0_1000_datasets.Rds="case_data_FOI_R0_1000_datasets.Rds"))
+
+orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefiles/DJI/gadm36_DJI_1.cpg', 
+                                  'shapefiles/DJI/gadm36_DJI_1.dbf' = 'shapefiles/DJI/gadm36_DJI_1.dbf', 
+                                  'shapefiles/DJI/gadm36_DJI_1.prj' = 'shapefiles/DJI/gadm36_DJI_1.prj', 
+                                  'shapefiles/DJI/gadm36_DJI_1.shp' = 'shapefiles/DJI/gadm36_DJI_1.shp', 
+                                  'shapefiles/DJI/gadm36_DJI_1.shx' = 'shapefiles/DJI/gadm36_DJI_1.shx', 
+                                  'shapefiles/SOM/gadm36_SOM_1.cpg' = 'shapefiles/SOM/gadm36_SOM_1.cpg', 
+                                  'shapefiles/SOM/gadm36_SOM_1.dbf' = 'shapefiles/SOM/gadm36_SOM_1.dbf', 
+                                  'shapefiles/SOM/gadm36_SOM_1.prj' = 'shapefiles/SOM/gadm36_SOM_1.prj',
+                                  'shapefiles/SOM/gadm36_SOM_1.shp' = 'shapefiles/SOM/gadm36_SOM_1.shp', 
+                                  'shapefiles/SOM/gadm36_SOM_1.shx' = 'shapefiles/SOM/gadm36_SOM_1.shx', 
+                                  'shapefiles/YEM/gadm36_YEM_1.cpg' = 'shapefiles/YEM/gadm36_YEM_1.cpg', 
+                                  'shapefiles/YEM/gadm36_YEM_1.dbf' = 'shapefiles/YEM/gadm36_YEM_1.dbf', 
+                                  'shapefiles/YEM/gadm36_YEM_1.prj' = 'shapefiles/YEM/gadm36_YEM_1.prj', 
+                                  'shapefiles/YEM/gadm36_YEM_1.shp' = 'shapefiles/YEM/gadm36_YEM_1.shp', 
+                                  'shapefiles/YEM/gadm36_YEM_1.shx' = 'shapefiles/YEM/gadm36_YEM_1.shx', 
+                                  
+                                  'shapefiles/DJI/gadm36_DJI_2.cpg' = 'shapefiles/DJI/gadm36_DJI_2.cpg', 
+                                  'shapefiles/DJI/gadm36_DJI_2.dbf' = 'shapefiles/DJI/gadm36_DJI_2.dbf', 
+                                  'shapefiles/DJI/gadm36_DJI_2.prj' = 'shapefiles/DJI/gadm36_DJI_2.prj', 
+                                  'shapefiles/DJI/gadm36_DJI_2.shp' = 'shapefiles/DJI/gadm36_DJI_2.shp', 
+                                  'shapefiles/DJI/gadm36_DJI_2.shx' = 'shapefiles/DJI/gadm36_DJI_2.shx', 
+                                  'shapefiles/SOM/gadm36_SOM_2.cpg' = 'shapefiles/SOM/gadm36_SOM_2.cpg', 
+                                  'shapefiles/SOM/gadm36_SOM_2.dbf' = 'shapefiles/SOM/gadm36_SOM_2.dbf', 
+                                  'shapefiles/SOM/gadm36_SOM_2.prj' = 'shapefiles/SOM/gadm36_SOM_2.prj',
+                                  'shapefiles/SOM/gadm36_SOM_2.shp' = 'shapefiles/SOM/gadm36_SOM_2.shp', 
+                                  'shapefiles/SOM/gadm36_SOM_2.shx' = 'shapefiles/SOM/gadm36_SOM_2.shx', 
+                                  'shapefiles/YEM/gadm36_YEM_2.cpg' = 'shapefiles/YEM/gadm36_YEM_2.cpg', 
+                                  'shapefiles/YEM/gadm36_YEM_2.dbf' = 'shapefiles/YEM/gadm36_YEM_2.dbf', 
+                                  'shapefiles/YEM/gadm36_YEM_2.prj' = 'shapefiles/YEM/gadm36_YEM_2.prj', 
+                                  'shapefiles/YEM/gadm36_YEM_2.shp' = 'shapefiles/YEM/gadm36_YEM_2.shp', 
+                                  'shapefiles/YEM/gadm36_YEM_2.shx' = 'shapefiles/YEM/gadm36_YEM_2.shx')
+
+orderly2::orderly_resource("all_DS_results_neighboursx2.rds")
+
+
 library(YEPaux)
 
 country_list=c("DJI","SOM")
-case_data=readRDS(file="results/case_data_FOI_R0_10_datasets.Rds")
+case_data=readRDS(file="case_data_FOI_R0_1000_datasets.Rds")
 case_data_selected=subset(case_data,substr(region,1,3) %in% country_list)
 adm1_regions=unique(case_data_selected$region)
 n_adm1_regions=length(adm1_regions)
@@ -30,7 +69,7 @@ for(n_adm1 in 1:n_adm1_regions){
   outbreak_risk_adm1[n_adm1]=min(1.0,outbreak_risk_adm1[n_adm1]/n_param_sets)
 }
 
-raptor_data=readRDS(file="exdata/all_DS_results_neighboursx2.rds")
+raptor_data=readRDS(file="all_DS_results_neighboursx2.rds")
 raptor_data_adm1_names=unique(raptor_data$Province)
 raptor_data_adm2_numbers=unique(raptor_data$District_id)
 raptor_data_adm2_names=unique(raptor_data$District)
@@ -61,15 +100,15 @@ par(mfrow=c(1,1))
 scale=c(0,1e-3,5e-3,1e-2,5e-2,1e-1,5e-1,1,5,10,50,100)
 create_map(shape_data2,rt_risk_scores_mean_adm2,scale=scale,colour_scale,pixels_max=1440,text_size=2,map_title="",
            legend_title="Mean relative transmission risk",legend_position="bottomright",legend_format="e",legend_dp=1,
-           output_file="maps/Raptor relative transmission risk - mean by district.png")
+           output_file="Raptor relative transmission risk - mean by district.png")
 create_map(shape_data2,rt_risk_scores_median_adm2,scale=scale,colour_scale,pixels_max=1440,text_size=2,map_title="",
            legend_title="Median relative transmission risk",legend_position="bottomright",legend_format="e",legend_dp=1,
-           output_file="maps/Raptor relative transmission risk - median by district.png")
+           output_file="Raptor relative transmission risk - median by district.png")
 
 scale=c(0,1e-4,5e-4,1e-3,5e-3,1e-2,5e-2,1e-1,5e-1,1,5)
 create_map(shape_data2,rel_outbreak_risk_adm2_a,scale=scale,colour_scale,pixels_max=1440,text_size=2,map_title="",
            legend_title="Relative outbreak risk",legend_position="bottomright",legend_format="e",legend_dp=1,
-        output_file="maps/Relative outbreak risk - outbreak risk due to seeded case x mean relative transmission risk - nx2.png")
+        output_file="Relative outbreak risk - outbreak risk due to seeded case x mean relative transmission risk - nx2.png")
 create_map(shape_data2,rel_outbreak_risk_adm2_b,scale=scale,colour_scale,pixels_max=1440,text_size=2,map_title="",
            legend_title="Relative outbreak risk",legend_position="bottomright",legend_format="e",legend_dp=1,
-           output_file="maps/Relative outbreak risk - outbreak risk due to seeded case x median relative transmission risk - nx2.png")
+           output_file="Relative outbreak risk - outbreak risk due to seeded case x median relative transmission risk - nx2.png")
