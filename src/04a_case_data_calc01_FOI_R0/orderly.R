@@ -1,19 +1,19 @@
 orderly2::orderly_dependency(name="01_get_FOI_R0_values_from_saved_chain_data", 
                              query="latest",
-                             files=c(DSY_1000_datasets_FOI_R0.Rds="DSY_1000_datasets_FOI_R0.Rds",
-                                     DSY_1000_datasets_additional.Rds="DSY_1000_datasets_additional.Rds"))
+                             files=c(DSY_selected_datasets_FOI_R0.Rds="DSY_selected_datasets_FOI_R0.Rds",
+                                     DSY_selected_datasets_additional.Rds="DSY_selected_datasets_additional.Rds"))
 
-orderly2::orderly_shared_resource("input_data_DSY_2022_2050.Rds"="input_data_DSY_2022_2050.Rds")
+orderly2::orderly_shared_resource("input_data.Rds"="input_data.Rds")
 
-orderly2::orderly_artefact("All data", "case_data_FOI_R0_1000_datasets.Rds")
+orderly2::orderly_artefact("All data", "case_data_FOI_R0_selected_datasets.Rds")
 
 library(YEP)
-input_data=readRDS(file="input_data_DSY_2022_2050.Rds")
-FOI_R0_values=readRDS(file="DSY_1000_datasets_FOI_R0.Rds")
+input_data=readRDS(file="input_data.Rds")
+FOI_R0_values=readRDS(file="DSY_selected_datasets_FOI_R0.Rds")
 assertthat::assert_that(all(FOI_R0_values$regions==input_data$region_labels))
 regions=input_data$region_labels
 n_regions=length(regions)
-additional_data=readRDS(file="DSY_1000_datasets_additional.Rds")
+additional_data=readRDS(file="DSY_selected_datasets_additional.Rds")
 n_param_sets=length(additional_data$vaccine_efficacy)
 FOI_array=array(FOI_R0_values$FOI,dim=c(n_regions,n_param_sets))
 R0_array=array(FOI_R0_values$R0,dim=c(n_regions,n_param_sets))
@@ -43,4 +43,4 @@ case_data_multi <- Generate_Multiple_Datasets(input_data_reduced,FOI_array,R0_ar
                                               vaccine_efficacy, p_severe_inf, p_death_severe_inf, 
                                               p_rep_severe=rep(1.0,n_param_sets),p_rep_death=rep(1.0,n_param_sets),
                                               mode_start,start_SEIRV, dt,n_reps, deterministic = FALSE,"none",NULL)
-saveRDS(case_data_multi$case_data,file="case_data_FOI_R0_1000_datasets.Rds")
+saveRDS(case_data_multi$case_data,file="case_data_FOI_R0_selected_datasets.Rds")

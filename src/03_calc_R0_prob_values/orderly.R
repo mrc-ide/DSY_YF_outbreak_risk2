@@ -1,6 +1,6 @@
 orderly2::orderly_dependency(name="01_get_FOI_R0_values_from_saved_chain_data", 
                              query="latest",
-                             files=c(DSY_1000_datasets.Rds="DSY_1000_datasets_FOI_R0.Rds"))
+                             files=c(DSY_selected_datasets.Rds="DSY_selected_datasets_FOI_R0.Rds"))
 
 orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefiles/DJI/gadm36_DJI_1.cpg', 
                                   'shapefiles/DJI/gadm36_DJI_1.dbf' = 'shapefiles/DJI/gadm36_DJI_1.dbf', 
@@ -23,7 +23,7 @@ orderly2::orderly_artefact(description="All figures",files=c("map_p_R0_05.png", 
 library(YEPaux)
 library(dplyr)
 
-dataset=readRDS(file="DSY_1000_datasets.Rds")
+dataset=readRDS(file="DSY_selected_datasets.Rds")
 
 # R0_prob_data=data.frame(region=regions,p_05=rep(NA,n_regions),p_07=rep(NA,n_regions),p_1=rep(NA,n_regions))
 # for(n_region in 1:n_regions){

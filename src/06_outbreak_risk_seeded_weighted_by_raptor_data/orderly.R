@@ -1,6 +1,8 @@
+orderly2::orderly_parameters(raptor_results_filename="all_DS_results_neighboursx2.rds")
+
 orderly2::orderly_dependency(name="04a_case_data_calc01_FOI_R0",
                              query="latest",
-                             files=c(case_data_FOI_R0_1000_datasets.Rds="case_data_FOI_R0_1000_datasets.Rds"))
+                             files=c(case_data_FOI_R0_selected_datasets.Rds="case_data_FOI_R0_selected_datasets.Rds"))
 
 orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefiles/DJI/gadm36_DJI_1.cpg', 
                                   'shapefiles/DJI/gadm36_DJI_1.dbf' = 'shapefiles/DJI/gadm36_DJI_1.dbf', 
@@ -32,15 +34,14 @@ orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefile
                                   'shapefiles/YEM/gadm36_YEM_2.dbf' = 'shapefiles/YEM/gadm36_YEM_2.dbf', 
                                   'shapefiles/YEM/gadm36_YEM_2.prj' = 'shapefiles/YEM/gadm36_YEM_2.prj', 
                                   'shapefiles/YEM/gadm36_YEM_2.shp' = 'shapefiles/YEM/gadm36_YEM_2.shp', 
-                                  'shapefiles/YEM/gadm36_YEM_2.shx' = 'shapefiles/YEM/gadm36_YEM_2.shx')
-
-orderly2::orderly_resource("all_DS_results_neighboursx2.rds")
-
+                                  'shapefiles/YEM/gadm36_YEM_2.shx' = 'shapefiles/YEM/gadm36_YEM_2.shx',
+                                  
+                                  "raptor_results.rds" = raptor_results_filename)
 
 library(YEPaux)
 
 country_list=c("DJI","SOM")
-case_data=readRDS(file="case_data_FOI_R0_1000_datasets.Rds")
+case_data=readRDS(file="case_data_FOI_R0_selected_datasets.Rds")
 case_data_selected=subset(case_data,substr(region,1,3) %in% country_list)
 adm1_regions=unique(case_data_selected$region)
 n_adm1_regions=length(adm1_regions)
@@ -69,7 +70,7 @@ for(n_adm1 in 1:n_adm1_regions){
   outbreak_risk_adm1[n_adm1]=min(1.0,outbreak_risk_adm1[n_adm1]/n_param_sets)
 }
 
-raptor_data=readRDS(file="all_DS_results_neighboursx2.rds")
+raptor_data=readRDS(file="raptor_results.rds")
 raptor_data_adm1_names=unique(raptor_data$Province)
 raptor_data_adm2_numbers=unique(raptor_data$District_id)
 raptor_data_adm2_names=unique(raptor_data$District)

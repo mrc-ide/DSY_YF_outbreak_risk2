@@ -1,6 +1,6 @@
 orderly2::orderly_dependency(name="01_get_FOI_R0_values_from_saved_chain_data", 
                              query="latest",
-                             files=c(DSY_1000_datasets_FOI_R0.Rds="DSY_1000_datasets_FOI_R0.Rds"))
+                             files=c(DSY_selected_datasets_FOI_R0.Rds="DSY_selected_datasets_FOI_R0.Rds"))
 
 
 orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefiles/DJI/gadm36_DJI_1.cpg', 
@@ -27,7 +27,7 @@ orderly2::orderly_artefact("All figures", c('FOI_map2_5pc.png', 'FOI_map25pc.png
 library(YEPaux)
 country_list=c("DJI","SOM","YEM")
 
-dataset=readRDS(file="DSY_1000_datasets_FOI_R0.Rds")
+dataset=readRDS(file="DSY_selected_datasets_FOI_R0.Rds")
 FOI_R0_dist_data=YEPaux::get_FOI_R0_dist_data(dataset)
 
 FOI_R0_dist_data[,c(3:8)]=FOI_R0_dist_data[,c(3:8)]*365.0 #Convert daily FOI to annual FOI

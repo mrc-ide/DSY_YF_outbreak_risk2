@@ -1,6 +1,6 @@
 orderly2::orderly_dependency(name="04b_case_data_calc02_R0_case_seeding",
                              query="latest",
-                             c(case_data_seeded_R0_1000_datasets.Rds="case_data_seeded_R0_1000_datasets.Rds"))
+                             c(case_data_seeded_R0_selected_datasets.Rds="case_data_seeded_R0_selected_datasets.Rds"))
 
 orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefiles/DJI/gadm36_DJI_1.cpg', 
                                   'shapefiles/DJI/gadm36_DJI_1.dbf' = 'shapefiles/DJI/gadm36_DJI_1.dbf', 
@@ -22,7 +22,7 @@ orderly2::orderly_artefact("All figures", "outbreak risk map (seeding+R0).png")
 
 library(YEPaux)
 
-case_data=readRDS(file="case_data_seeded_R0_1000_datasets.Rds")
+case_data=readRDS(file="case_data_seeded_R0_selected_datasets.Rds")
 regions=unique(case_data$region)
 n_regions=length(regions)
 n_param_sets=nrow(case_data)/n_regions
