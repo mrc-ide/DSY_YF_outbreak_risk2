@@ -48,7 +48,7 @@ shape_data=map_shapes_load(R0_prob_data$region, shapefiles, region_label_type="G
 colour_scheme=readRDS(file=paste(path.package("YEPaux"), "exdata/colour_scheme_example.Rds", sep="/"))
 colour_scale=colour_scheme$colour_scale
 
-scale=c(0,0.01,0.05,0.1,0.25,0.5,0.75,0.9,0.95,0.99,1.0)
+scale=c(0,0.01,0.05,0.1,0.25,0.5,0.75,0.9,0.95,0.99,1.00001)
 
 create_map(shape_data,R0_prob_data$p_05,scale=scale,colour_scale,pixels_max=1440,
            text_size=2,map_title="",legend_title="P(R0>=0.5)",legend_position="bottomright",
