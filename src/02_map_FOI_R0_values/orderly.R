@@ -63,7 +63,7 @@ for(data_select in c(1,3,5)){
   
   YEPaux::create_map(shape_data,R0_values,scale=scale_R0,colour_scale,pixels_max=720,
                      text_size=1,map_title="",legend_title="Basic reproduction number",legend_position="bottomright",
-                     legend_format="f",legend_dp=1,output_file=paste0("R0_map",data_type,".png"))
+                     legend_format="f",legend_dp=2,output_file=paste0("R0_map",data_type,".png"))
   
   
 }
