@@ -57,13 +57,17 @@ for(data_select in c(1,3,5)){
   FOI_values=FOI_R0_dist_data[,2+data_select]
   R0_values=FOI_R0_dist_data[,9+data_select]
   
-  YEPaux::create_map(shape_data,FOI_values,scale=scale_FOI,colour_scale,pixels_max=720,
-                     text_size=1,map_title="",legend_title="Spillover force of infection (annual)",legend_position="bottomright",
-                     legend_format="e",legend_dp=1,output_file=paste0("FOI_map",data_type,".png"))
+  png(paste0("FOI_map",data_type,".png"),width=945.507,height=1440)
+  YEPaux::create_map(shape_data,FOI_values,scale=scale_FOI,colour_scale,pixels_max=1440,
+                     text_size=2,map_title="",legend_title="Spillover force of infection (annual)",legend_position="bottomright",
+                     legend_format="e",legend_dp=1,output_file=NULL)
+  dev.off()
   
-  YEPaux::create_map(shape_data,R0_values,scale=scale_R0,colour_scale,pixels_max=720,
-                     text_size=1,map_title="",legend_title="Basic reproduction number",legend_position="bottomright",
-                     legend_format="f",legend_dp=2,output_file=paste0("R0_map",data_type,".png"))
+  png(paste0("R0_map",data_type,".png"),width=945.507,height=1440)
+  YEPaux::create_map(shape_data,R0_values,scale=scale_R0,colour_scale,pixels_max=1440,
+                     text_size=2,map_title="",legend_title="Basic reproduction number",legend_position="bottomright",
+                     legend_format="f",legend_dp=2,output_file=NULL)
+  dev.off()
   
   
 }
