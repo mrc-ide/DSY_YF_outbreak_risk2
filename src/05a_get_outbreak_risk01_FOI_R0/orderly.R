@@ -1,5 +1,4 @@
-orderly2::orderly_dependency(name="04a_case_data_calc01_FOI_R0",
-                             query="latest",
+orderly2::orderly_dependency(name="04a_case_data_calc01_FOI_R0", query="latest", #TODO - make query input parameter
                              c(case_data_FOI_R0_selected_datasets.Rds="case_data_FOI_R0_selected_datasets.Rds"))
 
 orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefiles/DJI/gadm36_DJI_1.cpg', 
@@ -47,6 +46,8 @@ for(n_region in 1:n_regions){
 colour_scheme=readRDS(file=paste(path.package("YEPaux"), "exdata/colour_scheme_example.Rds", sep="/"))
 colour_scale=colour_scheme$colour_scale
 scale=c(0,0.01,0.05,0.1,0.25,0.5,0.75,0.9,0.95,0.99,1.001)
+png("outbreak risk map (FOI+R0).png",width=945.507,height=1440)
 create_map(shape_data,outbreak_risk,scale=scale,colour_scale,pixels_max=1440,
            text_size=2,map_title="",legend_title="Outbreak risk",legend_position="bottomright",
-           legend_format="f",legend_dp=2,output_file="outbreak risk map (FOI+R0).png")
+           legend_format="f",legend_dp=2,output_file=NULL)
+dev.off()

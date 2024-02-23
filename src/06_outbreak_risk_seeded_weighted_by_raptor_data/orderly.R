@@ -1,7 +1,6 @@
 orderly2::orderly_parameters(raptor_results_filename="all_DS_results_neighboursx2 1.rds")
 
-orderly2::orderly_dependency(name="04a_case_data_calc01_FOI_R0",
-                             query="latest",
+orderly2::orderly_dependency(name="04a_case_data_calc01_FOI_R0",query="latest", #TODO - make query input parameter
                              files=c(case_data_FOI_R0_selected_datasets.Rds="case_data_FOI_R0_selected_datasets.Rds"))
 
 orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefiles/DJI/gadm36_DJI_1.cpg', 
@@ -90,6 +89,7 @@ for(n_adm2 in 1:n_adm2_regions){
 }
 
 #Checking that adm1 and adm2 outbreak risk maps match
+png("Risk maps adm1+adm2.png",width=2*945.507,height=1440)
 par(mfrow=c(1,2))
 scale=c(0,0.01,0.05,0.1,0.25,0.5,0.75,0.9,0.95,0.99,1.0001)
 create_map(shape_data1,outbreak_risk_adm1,scale=scale,colour_scale,pixels_max=1440,text_size=1,map_title="",
@@ -97,19 +97,28 @@ create_map(shape_data1,outbreak_risk_adm1,scale=scale,colour_scale,pixels_max=14
 create_map(shape_data2,outbreak_risk_adm2,scale=scale,colour_scale,pixels_max=1440,text_size=1,map_title="",
            legend_title="Outbreak risk",legend_position="bottomright",legend_format="f",legend_dp=2,NULL)
 par(mfrow=c(1,1))
+dev.off()
 
 scale=c(0,1e-3,5e-3,1e-2,5e-2,1e-1,5e-1,1,5,10,50,100.0001)
+png("Raptor relative transmission risk - mean by district.png",width=945.507,height=1440)
 create_map(shape_data2,rt_risk_scores_mean_adm2,scale=scale,colour_scale,pixels_max=1440,text_size=2,map_title="",
            legend_title="Mean relative transmission risk",legend_position="bottomright",legend_format="e",legend_dp=1,
-           output_file="Raptor relative transmission risk - mean by district.png")
+           output_file=NULL)
+dev.off()
+png("Raptor relative transmission risk - median by district.png",width=945.507,height=1440)
 create_map(shape_data2,rt_risk_scores_median_adm2,scale=scale,colour_scale,pixels_max=1440,text_size=2,map_title="",
            legend_title="Median relative transmission risk",legend_position="bottomright",legend_format="e",legend_dp=1,
-           output_file="Raptor relative transmission risk - median by district.png")
+           output_file=NULL)
+dev.off()
 
 scale=c(0,1e-4,5e-4,1e-3,5e-3,1e-2,5e-2,1e-1,5e-1,1,5,50,100)
+png("Relative outbreak risk due to seeded case x mean relative transmission risk - nx2.png",width=945.507,height=1440)
 create_map(shape_data2,rel_outbreak_risk_adm2_a,scale=scale,colour_scale,pixels_max=1440,text_size=2,map_title="",
            legend_title="Relative outbreak risk",legend_position="bottomright",legend_format="e",legend_dp=1,
-        output_file="Relative outbreak risk - outbreak risk due to seeded case x mean relative transmission risk - nx2.png")
+        output_file=NULL)
+dev.off()
+png("Relative outbreak risk due to seeded case x median relative transmission risk - nx2.png",width=945.507,height=1440)
 create_map(shape_data2,rel_outbreak_risk_adm2_b,scale=scale,colour_scale,pixels_max=1440,text_size=2,map_title="",
            legend_title="Relative outbreak risk",legend_position="bottomright",legend_format="e",legend_dp=1,
-           output_file="Relative outbreak risk - outbreak risk due to seeded case x median relative transmission risk - nx2.png")
+           output_file=NULL)
+dev.off()
