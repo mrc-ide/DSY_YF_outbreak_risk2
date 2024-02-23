@@ -1,4 +1,5 @@
-orderly2::orderly_dependency(name="04a_case_data_calc01_FOI_R0", query="latest", #TODO - make query input parameter
+orderly2::orderly_dependency(name="04a_case_data_calc01_FOI_R0",
+                             query="latest",
                              c(case_data_FOI_R0_selected_datasets.Rds="case_data_FOI_R0_selected_datasets.Rds"))
 
 orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefiles/DJI/gadm36_DJI_1.cpg', 
@@ -17,7 +18,8 @@ orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefile
                                   'shapefiles/YEM/gadm36_YEM_1.shp' = 'shapefiles/YEM/gadm36_YEM_1.shp', 
                                   'shapefiles/YEM/gadm36_YEM_1.shx' = 'shapefiles/YEM/gadm36_YEM_1.shx')
 
-orderly2::orderly_artefact("All figures", "outbreak risk map (FOI+R0).png")
+orderly2::orderly_artefact("Risk map", "outbreak risk map (FOI+R0).png")
+orderly2::orderly_artefact("Risk data frame", "outbreak_risk (FOI+R0).csv")
 
 library(YEPaux)
 
@@ -42,6 +44,9 @@ for(n_region in 1:n_regions){
   }
   outbreak_risk[n_region]=min(1.0,outbreak_risk[n_region]/n_param_sets)
 }
+
+output_frame=data.frame(region=regions,outbreak_risk=outbreak_risk)
+write.csv(output_frame,file="outbreak_risk (FOI+R0).csv",row.names=FALSE)
 
 colour_scheme=readRDS(file=paste(path.package("YEPaux"), "exdata/colour_scheme_example.Rds", sep="/"))
 colour_scale=colour_scheme$colour_scale

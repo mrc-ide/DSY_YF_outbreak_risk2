@@ -18,7 +18,8 @@ orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefile
                                   'shapefiles/YEM/gadm36_YEM_1.shp' = 'shapefiles/YEM/gadm36_YEM_1.shp', 
                                   'shapefiles/YEM/gadm36_YEM_1.shx' = 'shapefiles/YEM/gadm36_YEM_1.shx')
 
-orderly2::orderly_artefact("All figures", "outbreak risk map (seeding+R0).png")
+orderly2::orderly_artefact("Risk map", "outbreak risk map (seeding+R0).png")
+orderly2::orderly_artefact("Risk data frame", "outbreak_risk (seeding+R0).csv")
 
 library(YEPaux)
 
@@ -44,9 +45,14 @@ for(n_region in 1:n_regions){
   outbreak_risk[n_region]=min(1.0,outbreak_risk[n_region]/n_param_sets)
 }
 
+output_frame=data.frame(region=regions,outbreak_risk=outbreak_risk)
+write.csv(output_frame,file="outbreak_risk (seeding+R0).csv",row.names=FALSE)
+
 colour_scheme=readRDS(file=paste(path.package("YEPaux"), "exdata/colour_scheme_example.Rds", sep="/"))
 colour_scale=colour_scheme$colour_scale
-scale=c(0,0.01,0.05,0.1,0.25,0.5,0.75,0.9,0.95,0.99,1.001)
+scale=c(0,0.01,0.05,0.1,0.25,0.5,0.75,0.9,0.95,0.99,1.0)
+png("outbreak risk map (seeding+R0).png",width=945.507,height=1440)
 create_map(shape_data,outbreak_risk,scale=scale,colour_scale,pixels_max=1440,
            text_size=2,map_title="",legend_title="Outbreak risk",legend_position="bottomright",
-           legend_format="f",legend_dp=2,output_file="outbreak risk map (seeding+R0).png")
+           legend_format="f",legend_dp=2,output_file=NULL)
+dev.off()
