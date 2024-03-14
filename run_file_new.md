@@ -30,4 +30,4 @@ orderly2::orderly_run("05b_get_outbreak_risk02_R0_case_seeding")
 # Calculate outbreak risk based on seeding weighted by Raptor data
 # TODO - Fix issue causing dev.off() error message (avoidable by running again?)
 orderly2::orderly_run("06_outbreak_risk_seeded_weighted_by_raptor_data",
-  list(raptor_results_filename="all_DS_results_neighboursx2 1.rds"))
+  list(raptor_results_filename="all_DS_results_neighbours 1.rds"))
