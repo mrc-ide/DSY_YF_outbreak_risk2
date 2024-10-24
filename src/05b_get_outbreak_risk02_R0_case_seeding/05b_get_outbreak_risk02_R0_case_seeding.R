@@ -48,11 +48,13 @@ for(n_region in 1:n_regions){
 output_frame=data.frame(region=regions,outbreak_risk=outbreak_risk)
 write.csv(output_frame,file="outbreak_risk (seeding+R0).csv",row.names=FALSE)
 
-colour_scheme=readRDS(file=paste(path.package("YEPaux"), "exdata/colour_scheme_example.Rds", sep="/"))
-colour_scale=colour_scheme$colour_scale
+#colour_scheme=readRDS(file=paste(path.package("YEPaux"), "exdata/colour_scheme_example.Rds", sep="/"))
+#colour_scale=colour_scheme$colour_scale
+palette=MetBrewer::met.brewer("Hiroshige")
+colour_scale=as.vector(palette)[c(10:1)]
 scale=c(0,0.01,0.05,0.1,0.25,0.5,0.75,0.9,0.95,0.99,1.0)
 png("outbreak risk map (seeding+R0).png",width=945.507,height=1440)
 create_map(shape_data,outbreak_risk,scale=scale,colour_scale,pixels_max=1440,
-           text_size=2,map_title="",legend_title="Outbreak risk",legend_position="bottomright",
+           text_size=2,map_title="",legend_title="Outbreak probability",legend_position="bottomright",
            legend_format="f",legend_dp=2,output_file=NULL)
 dev.off()

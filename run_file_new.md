@@ -1,5 +1,3 @@
-#TODO - Add more options to input parameters here rather than setting them in source files
-
 # Initialize
 path=getwd() #Adjust if not using project file
 orderly2::orderly_init(path)
