@@ -24,8 +24,9 @@ orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefile
 # orderly2::orderly_artefact("All figures", c('FOI_map2_5pc.png', 'FOI_map25pc.png', 'FOI_map50pc.png', 'FOI_map75pc.png', 
 #                                             'FOI_map97_5pc.png', 'FOI_mapmean.png', 'R0_map2_5pc.png', 
 #                                             'R0_map25pc.png', 'R0_map50pc.png', 'R0_map75pc.png', 'R0_map97_5pc.png', 'R0_mapmean.png'))
-orderly2::orderly_artefact("All figures", c('FOI_map2_5pc.png', 'FOI_map50pc.png','FOI_map97_5pc.png', 
-                                            'R0_map2_5pc.png', 'R0_map50pc.png', 'R0_map97_5pc.png'))
+orderly2::orderly_artefact(description="All figures", files=c('FOI_map2_5pc.png', 'FOI_map50pc.png',
+                                                              'FOI_map97_5pc.png', 'R0_map2_5pc.png', 
+                                                              'R0_map50pc.png', 'R0_map97_5pc.png'))
 
 library(YEPaux)
 country_list=c("DJI","SOM","YEM")

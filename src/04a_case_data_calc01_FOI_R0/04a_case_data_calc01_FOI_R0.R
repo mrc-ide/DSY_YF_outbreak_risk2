@@ -5,7 +5,7 @@ orderly2::orderly_dependency(name="01_get_FOI_R0_values_from_saved_chain_data",
 
 orderly2::orderly_shared_resource("input_data.Rds"="input_data.Rds")
 
-orderly2::orderly_artefact("All data", "case_data_FOI_R0_selected_datasets.Rds")
+orderly2::orderly_artefact(description="All data", files=c("case_data_FOI_R0_selected_datasets.Rds"))
 
 library(YEP)
 input_data=readRDS(file="input_data.Rds")

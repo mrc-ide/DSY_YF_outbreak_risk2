@@ -18,8 +18,8 @@ orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefile
                                   'shapefiles/YEM/gadm36_YEM_1.shp' = 'shapefiles/YEM/gadm36_YEM_1.shp', 
                                   'shapefiles/YEM/gadm36_YEM_1.shx' = 'shapefiles/YEM/gadm36_YEM_1.shx')
 
-orderly2::orderly_artefact("Risk map", "outbreak risk map (seeding+R0).png")
-orderly2::orderly_artefact("Risk data frame", "outbreak_risk (seeding+R0).csv")
+orderly2::orderly_artefact(description="Risk map", files=c("outbreak risk map (seeding+R0).png"))
+orderly2::orderly_artefact(description="Risk data frame", files=c("outbreak_risk (seeding+R0).csv"))
 
 library(YEPaux)
 

@@ -5,8 +5,8 @@ orderly2::orderly_parameters(n_param_sets=10,enviro_filename="enviro_data_IAregi
 orderly2::orderly_shared_resource("enviro_data.csv" = enviro_filename,
                            "markov_chain_data.Rds" = chain_filename)
 
-orderly2::orderly_artefact("FOI and R0 values", "DSY_selected_datasets_FOI_R0.Rds" )
-orderly2::orderly_artefact("Other parameter values", "DSY_selected_datasets_FOI_R0.Rds" )
+orderly2::orderly_artefact(description="FOI and R0 values", files=c("DSY_selected_datasets_FOI_R0.Rds" ))
+orderly2::orderly_artefact(description="Other parameter values", files=c("DSY_selected_datasets_FOI_R0.Rds" ))
 
 library(YEPaux)
 
