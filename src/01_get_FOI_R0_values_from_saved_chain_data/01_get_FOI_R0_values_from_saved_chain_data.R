@@ -8,7 +8,7 @@ orderly2::orderly_shared_resource("enviro_data.csv" = enviro_filename,
 orderly2::orderly_artefact(description="FOI and R0 values", files=c("DSY_selected_datasets_FOI_R0.Rds" ))
 orderly2::orderly_artefact(description="Other parameter values", files=c("DSY_selected_datasets_FOI_R0.Rds" ))
 
-library(YEPaux)
+#library(YEPaux)
 
 enviro_data=read.csv(file="enviro_data.csv",header=TRUE)
 regions=enviro_data$region
@@ -22,7 +22,7 @@ n_entries=nrow(chain_data)
 interval=floor(n_entries/n_param_sets)
 lines=c(1:n_param_sets)*interval
 chain_data_selected=chain_data[lines,c(2:ncol(chain_data))]
-FOI_R0_values=YEPaux::get_mcmc_FOI_R0_data(chain_data_selected,type="FOI+R0 enviro",enviro_data)
+FOI_R0_values=YEPaux::get_mcmc_FOI_R0_data(chain_data_selected,enviro_data_const=enviro_data, enviro_data_var=NULL)
 
 FOI_values_array=array(data=FOI_R0_values$FOI,dim=c(n_regions,n_param_sets))
 R0_values_array=array(data=FOI_R0_values$R0,dim=c(n_regions,n_param_sets))

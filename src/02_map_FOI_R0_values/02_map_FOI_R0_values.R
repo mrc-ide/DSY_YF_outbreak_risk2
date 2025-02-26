@@ -20,15 +20,7 @@ orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefile
                                   'shapefiles/YEM/gadm36_YEM_1.shp' = 'shapefiles/YEM/gadm36_YEM_1.shp', 
                                   'shapefiles/YEM/gadm36_YEM_1.shx' = 'shapefiles/YEM/gadm36_YEM_1.shx')
 
-
-# orderly2::orderly_artefact("All figures", c('FOI_map2_5pc.png', 'FOI_map25pc.png', 'FOI_map50pc.png', 'FOI_map75pc.png', 
-#                                             'FOI_map97_5pc.png', 'FOI_mapmean.png', 'R0_map2_5pc.png', 
-#                                             'R0_map25pc.png', 'R0_map50pc.png', 'R0_map75pc.png', 'R0_map97_5pc.png', 'R0_mapmean.png'))
-orderly2::orderly_artefact(description="All figures", files=c('FOI_map2_5pc.png', 'FOI_map50pc.png',
-                                                              'FOI_map97_5pc.png', 'R0_map2_5pc.png', 
-                                                              'R0_map50pc.png', 'R0_map97_5pc.png'))
-
-library(YEPaux)
+#library(YEPaux)
 country_list=c("DJI","SOM","YEM")
 
 dataset=readRDS(file="DSY_selected_datasets_FOI_R0.Rds")
@@ -42,7 +34,7 @@ shapefiles=rep("",length(country_list))
 for(i in 1:length(country_list)){
   shapefiles[i]=paste0("shapefiles/",country_list[i],"/gadm36_",country_list[i],"_1.shp")
 }
-shape_data=map_shapes_load(regions, shapefiles, region_label_type="GID_1")
+shape_data=YEPaux::map_shapes_load(regions, shapefiles, region_label_type="GID_1")
 
 colour_scale=readRDS(file=paste(path.package("YEPaux"), "exdata/colour_scheme_example.Rds", sep="/"))$colour_scale
 #scale_FOI=pretty(as.vector(t(FOI_R0_dist_data[,c(3:6)])),10)
@@ -52,10 +44,14 @@ scale_R0=c(0,0.5,0.6,0.7,0.8,0.85,0.9,0.95,1.0,1.05,1.1,1.15)
 
 data_types=c("2_5pc","25pc","median","75pc","97_5pc","mean")
 
-for(data_select in c(1,3,5)){
+for(data_select in c(1,2,3,4,5)){
   data_type=data_types[data_select]
   FOI_values=FOI_R0_dist_data[,2+data_select]
   R0_values=FOI_R0_dist_data[,9+data_select]
+  
+  orderly2::orderly_artefact(description=paste0("Figures ",data_select), files=c(paste0("epi_map_FOI_",data_type,".png"),
+                                                                                 paste0("epi_map_R0_",data_type,".png")))
+  
   
   png(paste0("epi_map_FOI_",data_type,".png"),width=945.507,height=1440)
   YEPaux::create_map(shape_data,FOI_values,scale=scale_FOI,colour_scale,pixels_max=1440,
