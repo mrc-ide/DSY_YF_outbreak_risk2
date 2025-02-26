@@ -40,4 +40,4 @@ case_data_multi <- Generate_Multiple_Datasets(input_data_reduced,FOI_array,R0_ar
                                               vaccine_efficacy, p_severe_inf, p_death_severe_inf, 
                                               p_rep_severe=rep(1.0,n_param_sets),p_rep_death=rep(1.0,n_param_sets),
                                               mode_start,start_SEIRV, dt,n_reps, deterministic = FALSE,"none",NULL)
-saveRDS(case_data_multi$case_data,file="results/case_data_seeded_R0_1000_datasets.Rds")
+#saveRDS(case_data_multi$case_data,file="results/case_data_seeded_R0_1000_datasets.Rds")
