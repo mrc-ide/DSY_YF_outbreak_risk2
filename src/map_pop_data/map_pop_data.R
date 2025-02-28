@@ -1,6 +1,4 @@
-orderly2::orderly_dependency(name="04b_case_data_calc02_R0_case_seeding",
-                             query="latest",
-                             c(case_data_seeded_R0_selected_datasets.Rds="case_data_seeded_R0_selected_datasets.Rds"))
+orderly2::orderly_shared_resource("input_data.Rds"="input_data.Rds")
 
 orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefiles/DJI/gadm36_DJI_1.cpg', 
                                   'shapefiles/DJI/gadm36_DJI_1.dbf' = 'shapefiles/DJI/gadm36_DJI_1.dbf', 
@@ -18,14 +16,17 @@ orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefile
                                   'shapefiles/YEM/gadm36_YEM_1.shp' = 'shapefiles/YEM/gadm36_YEM_1.shp', 
                                   'shapefiles/YEM/gadm36_YEM_1.shx' = 'shapefiles/YEM/gadm36_YEM_1.shx')
 
-orderly2::orderly_artefact(description="Risk map", files=c("outbreak risk map (seeding+R0).png"))
-orderly2::orderly_artefact(description="Risk data frame", files=c("outbreak_risk (seeding+R0).csv"))
+input_data=readRDS(file="input_data.Rds")
+years_data=c(2023)
+n_years=length(years_data)
+years_input_required=c(years_data[1]:(max(years_data)+1))
+n_years_input_required=c(1:length(input_data$years_labels))[input_data$years_labels %in% years_input_required]
 
-case_data=readRDS(file="case_data_seeded_R0_selected_datasets.Rds")
-regions=unique(case_data$region)
-n_regions=length(regions)
-n_param_sets=nrow(case_data)/n_regions
-cases_array=array(case_data$cases,dim=c(n_regions,n_param_sets))
+input_data_reduced=list(region_labels=input_data$region_labels,years_labels=input_data$years_labels[n_years_input_required],
+                        age_labels=input_data$age_labels,vacc_data=input_data$vacc_data[,n_years_input_required,],
+                        pop_data=input_data$pop_data[,n_years_input_required,])
+
+pop_values=rowSums(input_data_reduced$pop_data[,1,])
 
 country_list=unique(substr(regions,1,3))
 shapefiles=rep("",length(country_list))
@@ -34,24 +35,12 @@ for(i in 1:length(country_list)){
 }
 shape_data=map_shapes_load(regions, shapefiles, region_label_type="GID_1")
 
-outbreak_risk=rep(0,n_regions)
-for(n_region in 1:n_regions){
-  for(n_param_set in 1:n_param_sets){
-    if(cases_array[n_region,n_param_set]>=1.0){outbreak_risk[n_region]=outbreak_risk[n_region]+1}
-  }
-  outbreak_risk[n_region]=min(1.0,outbreak_risk[n_region]/n_param_sets)
-}
+colour_scheme=readRDS(file=paste(path.package("YEPaux"), "exdata/colour_scheme_example.Rds", sep="/"))
+colour_scale=colour_scheme$colour_scale
 
-output_frame=data.frame(region=regions,outbreak_risk=outbreak_risk)
-write.csv(output_frame,file="outbreak_risk (seeding+R0).csv",row.names=FALSE)
-
-#colour_scheme=readRDS(file=paste(path.package("YEPaux"), "exdata/colour_scheme_example.Rds", sep="/"))
-#colour_scale=colour_scheme$colour_scale
-palette=MetBrewer::met.brewer("Hiroshige")
-colour_scale=as.vector(palette)[c(10:1)]
-scale=c(0,0.01,0.05,0.1,0.25,0.5,0.75,0.9,0.95,0.99,1.0)
-png("outbreak risk map (seeding+R0).png",width=945.507,height=1440)
-create_map(shape_data,outbreak_risk,scale=scale,colour_scale,pixels_max=1440,
-           text_size=2,map_title="",legend_title="Outbreak probability",legend_position="bottomright",
-           legend_format="f",legend_dp=2,output_file=NULL)
+scale=c(0,5e4,1e5,2.5e5,5e5,7.5e5,1e6,2.5e6,5e6)
+png("Population map.png",width=945.507,height=1440)
+create_map(shape_data,pop_values,scale=scale,colour_scale,pixels_max=1440,
+           text_size=2,map_title="",legend_title="Population",legend_position="bottomright",
+           legend_format="e",legend_dp=1,output_file=NULL)
 dev.off()
