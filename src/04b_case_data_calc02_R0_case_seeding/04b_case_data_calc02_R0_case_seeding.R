@@ -67,6 +67,8 @@ for(set in selection){
     datasets_all=rbind(datasets_all,dataset_single$model_case_data[,c(1,3)])
   }
 }
-datasets_all$attack_rates=datasets_all$cases/(p_severe_inf*rowSums(input_data_reduced$pop_data[,1,]))
+datasets_all$severe_cases=datasets_all$cases
+datasets_all$cases=datasets_all$severe_cases/p_severe_inf
+datasets_all$attack_rates=datasets_all$cases/rowSums(input_data_reduced$pop_data[,1,])
 
 saveRDS(datasets_all,file="case_data_seeded_R0_selected_datasets.Rds")
