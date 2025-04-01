@@ -1,6 +1,6 @@
 #orderly2::orderly_parameters(scale_FOI=NULL,scale_R0=NULL)
 
-orderly2::orderly_dependency(name="01_get_FOI_R0_values_from_saved_chain_data", query="latest", #TODO - make query input parameter
+orderly2::orderly_dependency(name="get_FOI_R0_values_from_saved_chain_data", query="latest", #TODO - make query input parameter
                              files=c(DSY_selected_datasets_FOI_R0.Rds="DSY_selected_datasets_FOI_R0.Rds"))
 
 

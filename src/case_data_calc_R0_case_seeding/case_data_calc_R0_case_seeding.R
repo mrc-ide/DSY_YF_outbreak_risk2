@@ -1,7 +1,7 @@
 orderly2::orderly_parameters(p_severe_inf=0.12, p_death_severe_inf=0.39, deterministic=FALSE, n_sets_to_run=NULL, n_reps=1,
                              mode_parallel=FALSE, n_cores=1)
 
-orderly2::orderly_dependency(name="01_get_FOI_R0_values_from_saved_chain_data", 
+orderly2::orderly_dependency(name="get_FOI_R0_values_from_saved_chain_data", 
                              query="latest",
                              files=c(DSY_selected_datasets_FOI_R0.Rds="DSY_selected_datasets_FOI_R0.Rds",
                                      DSY_selected_datasets_additional.Rds="DSY_selected_datasets_additional.Rds"))

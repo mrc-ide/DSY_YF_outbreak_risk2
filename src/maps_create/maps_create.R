@@ -1,9 +1,9 @@
 orderly2::orderly_parameters(case_id="latest",risk_id="latest")
 
-orderly2::orderly_dependency(name="04b_case_data_calc02_R0_case_seeding",
+orderly2::orderly_dependency(name="case_data_calc_R0_case_seeding",
                             query=case_id,
                             c("case_data_seeded_R0_selected_datasets.Rds"="case_data_seeded_R0_selected_datasets.Rds"))
-orderly2::orderly_dependency(name="05b_get_outbreak_risk02_R0_case_seeding",
+orderly2::orderly_dependency(name="get_outbreak_risk_R0_case_seeding",
                              query=risk_id,
                              c("outbreak_risk (seeding+R0).csv"="outbreak_risk (seeding+R0).csv"))
 
