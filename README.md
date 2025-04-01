@@ -1,6 +1,6 @@
 # Introduction
 
-Calculations of outbreak risk for Indian Ocean countries.
+Calculations of outbreak risk for Djibouti, Somalia and Yemen.
 
 # Running the code
 
