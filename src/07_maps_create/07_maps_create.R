@@ -45,7 +45,7 @@ secondary_infs_mean1=rowMeans(array(case_data$cases-1,dim=c(n_regions,n_param_se
 attack_rate_mean2=secondary_infs_mean2=outbreak_size_mean2=rep(NA,n_regions)
 for(n_region in 1:n_regions){
   subset=subset(case_data,region==regions[n_region])
-  pts=subset$cases>=1.0
+  pts=subset$severe_cases>=1.0
   attack_rate_mean2[n_region]=mean(subset$attack_rates[pts])
   outbreak_size_mean2[n_region]=mean(subset$severe_cases[pts])
   secondary_infs_mean2[n_region]=mean(subset$cases[pts]-1)
@@ -90,18 +90,18 @@ scale_si=c(0,1,2,2.5,3,4,5,10,25,50,100)
 png("mean secondary infections (all) map (seeding+R0).png",width=945.507,height=1440)
 create_map(shape_data,secondary_infs_mean1,scale=scale_si,colour_scale,pixels_max=1440,
            text_size=2,map_title="",legend_title="Mean secondary infections (all)",legend_position="bottomright",
-           legend_format="e",legend_dp=1,output_file=NULL)
+           legend_format="f",legend_dp=2,output_file=NULL)
 dev.off()
 
 png("mean secondary infections (outbreaks) map (seeding+R0).png",width=945.507,height=1440)
 create_map(shape_data,secondary_infs_mean2,scale=scale_si,colour_scale,pixels_max=1440,
            text_size=2,map_title="",legend_title="Mean secondary infections (outbreaks)",legend_position="bottomright",
-           legend_format="e",legend_dp=1,output_file=NULL)
+           legend_format="f",legend_dp=2,output_file=NULL)
 dev.off()
 
 scale_os=c(0,1,1.25,1.5,1.75,2,2.5,5,7.5,10,12.5)
 png("mean outbreak size map (seeding+R0).png",width=945.507,height=1440)
 create_map(shape_data,outbreak_size_mean2,scale=scale_os,colour_scale,pixels_max=1440,
            text_size=2,map_title="",legend_title="Mean outbreak size",legend_position="bottomright",
-           legend_format="e",legend_dp=1,output_file=NULL)
+           legend_format="f",legend_dp=2,output_file=NULL)
 dev.off()

@@ -1,4 +1,5 @@
-orderly2::orderly_parameters(p_severe_inf=0.12, p_death_severe_inf=0.39, deterministic=FALSE, n_sets_to_run=NULL, n_reps=1)
+orderly2::orderly_parameters(p_severe_inf=0.12, p_death_severe_inf=0.39, deterministic=FALSE, n_sets_to_run=NULL, n_reps=1,
+                             mode_parallel=FALSE, n_cores=1)
 
 orderly2::orderly_dependency(name="01_get_FOI_R0_values_from_saved_chain_data", 
                              query="latest",
@@ -50,6 +51,7 @@ for(n_region in 1:n_regions){
 }
 time_inc=5.0
 
+if(mode_parallel){cluster=parallel::makeCluster(n_cores)}else{cluster=NULL}
 for(set in selection){
   if(set %% 10 == 1){cat("\n")}
   cat(set,"\t")
@@ -59,7 +61,7 @@ for(set in selection){
                                      vaccine_efficacy = additional_data$vaccine_efficacy[set], time_inc = time_inc, mode_start = mode_start, 
                                      start_SEIRV = start_SEIRV, mode_time = 0,n_reps = n_reps,deterministic = deterministic, 
                                      p_severe_inf = p_severe_inf, p_death_severe_inf = p_death_severe_inf,
-                                     p_rep_severe = 1.0,p_rep_death = 1.0,mode_parallel = FALSE,cluster = NULL,
+                                     p_rep_severe = 1.0,p_rep_death = 1.0,mode_parallel = mode_parallel,cluster = cluster,
                                      output_frame = TRUE, seed = set)
   if(set==selection[1]){
     datasets_all=dataset_single$model_case_data[,c(1,3)]
@@ -67,6 +69,7 @@ for(set in selection){
     datasets_all=rbind(datasets_all,dataset_single$model_case_data[,c(1,3)])
   }
 }
+if(mode_parallel){parallel::stopCluster(cluster)}
 datasets_all$severe_cases=datasets_all$cases
 datasets_all$cases=datasets_all$severe_cases/p_severe_inf
 datasets_all$attack_rates=datasets_all$cases/rowSums(input_data_reduced$pop_data[,1,])
