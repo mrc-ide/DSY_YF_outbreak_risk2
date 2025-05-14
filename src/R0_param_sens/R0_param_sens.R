@@ -80,22 +80,32 @@ if(pars$mode_parallel){parallel::stopCluster(cluster)}
 saveRDS(case_array,"data_all.Rds")
 
 R0_sens_data = list(R0_values = t(FOI_R0_values$R0[selection,,1]),
-                    risk_values = array(NA,dim=c(n_regions,n_sets_to_run)))
+                    risk_values = array(NA,dim=c(n_regions,n_sets_to_run)),
+                    outbreak_size_values = array(NA,dim=c(n_regions,n_sets_to_run)))
 for(n_set in 1:n_sets_to_run){
   for(n_region in 1:n_regions){
     case_values=case_array[n_region,n_set,] 
     R0_sens_data$risk_values[n_region,n_set]=length(case_values[case_values>0])
+    R0_sens_data$outbreak_size_values[n_region,n_set]=mean(case_values)
   }
 }
 R0_sens_data$risk_values=R0_sens_data$risk_values/n_reps
 
 saveRDS(R0_sens_data,"R0_sens_data.Rds")
 
-regions_select=c(1:n_regions)[matrixStats::rowMaxs(R0_sens_data$R0_values)>0.9]
-xlim=c(min(R0_sens_data$R0_values[regions_select]),max(R0_sens_data$R0_values[regions_select]))
+regions_select=c(1:n_regions)#[matrixStats::rowMaxs(R0_sens_data$R0_values)>0.9]
+xlim=c(min(R0_sens_data$R0_values[regions_select])*0.9,max(R0_sens_data$R0_values[regions_select])*1.1)
 matplot(x=xlim,y=c(0,1),type="p",col=0,xlim=xlim,ylim=c(0,1),xlab="R0",ylab="Risk")
 for(n_region in regions_select){
   matplot(x=R0_sens_data$R0_values[n_region,order(R0_sens_data$R0_values[n_region,])],
           y=R0_sens_data$risk_values[n_region,order(R0_sens_data$R0_values[n_region,])],
-          type="l",pch=1,col="grey",add=TRUE)
+          type="p",pch=1,col="grey",add=TRUE)
+}
+
+matplot(x=xlim,y=c(0,1),type="p",col=0,xlim=xlim,ylim=c(0,max(R0_sens_data$outbreak_size_values[regions_select,])),
+        xlab="R0",ylab="Mean outbreak size")
+for(n_region in regions_select){
+  matplot(x=R0_sens_data$R0_values[n_region,order(R0_sens_data$R0_values[n_region,])],
+          y=R0_sens_data$outbreak_size_values[n_region,order(R0_sens_data$R0_values[n_region,])],
+          type="p",pch=1,col="grey",add=TRUE)
 }

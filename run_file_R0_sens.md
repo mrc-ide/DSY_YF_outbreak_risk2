@@ -13,7 +13,7 @@ library(YEPaux)
 
 # Calculate case data based on seeded case and R0 values
 orderly2::orderly_run("R0_param_sens", parameters = list(p_severe_inf=0.12, p_death_severe_inf=0.39,
-                                            n_sets_to_run=20,n_reps=20,
+                                            n_sets_to_run=1000,n_reps=10,
                                             mode_parallel=TRUE,n_cores=4))
 
 # Calculate outbreak risk from second case data set
