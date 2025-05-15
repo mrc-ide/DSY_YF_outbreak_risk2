@@ -1,10 +1,10 @@
-orderly2::orderly_parameters(case_id="latest",risk_id="latest")
+pars = orderly2::orderly_parameters(case_id="latest",risk_id="latest")
 
 orderly2::orderly_dependency(name="case_data_calc_R0_case_seeding",
-                            query=case_id,
+                            query=pars$case_id,
                             c("case_data_seeded_R0_selected_datasets.Rds"="case_data_seeded_R0_selected_datasets.Rds"))
 orderly2::orderly_dependency(name="get_outbreak_risk_R0_case_seeding",
-                             query=risk_id,
+                             query=pars$risk_id,
                              c("outbreak_risk (seeding+R0).csv"="outbreak_risk (seeding+R0).csv"))
 
 orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefiles/DJI/gadm36_DJI_1.cpg', 
