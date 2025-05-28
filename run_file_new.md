@@ -25,3 +25,6 @@ orderly2::orderly_run("outbreak_risk_seeded_weighted_by_raptor_data",
   
 # Map attack rate and other alternate infection/outbreak outputs based on seeding
 orderly2::orderly_run("maps_create")
+
+# Create violin plot of R0 values
+orderly2::orderly_run("R0_violin_plot")
