@@ -7,21 +7,9 @@ orderly2::orderly_dependency(name="get_outbreak_risk_R0_case_seeding",
                              query=pars$risk_id,
                              c("outbreak_risk (seeding+R0).csv"="outbreak_risk (seeding+R0).csv"))
 
-orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefiles/DJI/gadm36_DJI_1.cpg', 
-                                  'shapefiles/DJI/gadm36_DJI_1.dbf' = 'shapefiles/DJI/gadm36_DJI_1.dbf', 
-                                  'shapefiles/DJI/gadm36_DJI_1.prj' = 'shapefiles/DJI/gadm36_DJI_1.prj', 
-                                  'shapefiles/DJI/gadm36_DJI_1.shp' = 'shapefiles/DJI/gadm36_DJI_1.shp', 
-                                  'shapefiles/DJI/gadm36_DJI_1.shx' = 'shapefiles/DJI/gadm36_DJI_1.shx', 
-                                  'shapefiles/SOM/gadm36_SOM_1.cpg' = 'shapefiles/SOM/gadm36_SOM_1.cpg', 
-                                  'shapefiles/SOM/gadm36_SOM_1.dbf' = 'shapefiles/SOM/gadm36_SOM_1.dbf', 
-                                  'shapefiles/SOM/gadm36_SOM_1.prj' = 'shapefiles/SOM/gadm36_SOM_1.prj',
-                                  'shapefiles/SOM/gadm36_SOM_1.shp' = 'shapefiles/SOM/gadm36_SOM_1.shp', 
-                                  'shapefiles/SOM/gadm36_SOM_1.shx' = 'shapefiles/SOM/gadm36_SOM_1.shx', 
-                                  'shapefiles/YEM/gadm36_YEM_1.cpg' = 'shapefiles/YEM/gadm36_YEM_1.cpg', 
-                                  'shapefiles/YEM/gadm36_YEM_1.dbf' = 'shapefiles/YEM/gadm36_YEM_1.dbf', 
-                                  'shapefiles/YEM/gadm36_YEM_1.prj' = 'shapefiles/YEM/gadm36_YEM_1.prj', 
-                                  'shapefiles/YEM/gadm36_YEM_1.shp' = 'shapefiles/YEM/gadm36_YEM_1.shp', 
-                                  'shapefiles/YEM/gadm36_YEM_1.shx' = 'shapefiles/YEM/gadm36_YEM_1.shx')
+#Load new shape data and region cross-referencing table
+orderly2::orderly_shared_resource('shapefile_data_DSY_adm1.Rds' = 'shapefile_data_DSY_adm1.Rds',
+                                  'xref_adm1.Rds' = 'xref_adm1.Rds')
 
 orderly2::orderly_artefact(description="Mean attack rate map", files=c("outbreak risk map (seeding+R0).png",
                                                                        "mean attack rate (all) map (seeding+R0).png",
@@ -31,6 +19,10 @@ orderly2::orderly_artefact(description="Mean attack rate map", files=c("outbreak
                                                                        "mean outbreak size map (seeding+R0).png"))
 
 case_data=readRDS(file="case_data_seeded_R0_selected_datasets.Rds")
+shape_data=readRDS("shapefile_data_DSY_adm1.Rds")
+xref_table=readRDS("xref_adm1.Rds")
+#TODO - convert case data to new regions using xref table
+
 # if(is.null(case_data$severe_cases)){ #TEMP
 #   case_data$severe_cases=case_data$cases
 #   case_data$cases=round(case_data$cases/0.12)
