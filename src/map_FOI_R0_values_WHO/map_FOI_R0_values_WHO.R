@@ -1,17 +1,17 @@
-#orderly2::orderly_parameters(scale_FOI=NULL,scale_R0=NULL)
+library(ggplot2)
+library(YEPaux)
 
-orderly2::orderly_dependency(name="get_FOI_R0_values_from_saved_chain_data", query="latest", #TODO - make query input parameter
-                             files=c(DSY_selected_datasets_FOI_R0.Rds="DSY_selected_datasets_FOI_R0.Rds"))
+orderly_dependency(name="get_FOI_R0_values_from_saved_chain_data", query="latest", #TODO - make query input parameter
+                   files=c(DSY_selected_datasets_FOI_R0.Rds="DSY_selected_datasets_FOI_R0.Rds"))
 
 #Load new shape data and region cross-referencing table
-orderly2::orderly_shared_resource('shapefile_data_DSY_adm1.Rds' = 'shapefile_data_DSY_adm1.Rds',
-                                  'xref_adm1.Rds' = 'xref_adm1.Rds')
+orderly_shared_resource('shapefile_data_DSY_adm1.Rds' = 'shapefile_data_DSY_adm1.Rds',
+                        'xref_adm1.Rds' = 'xref_adm1.Rds')
 
-#library(YEPaux)
 country_list=c("DJI","SOM","YEM")
 
 dataset=readRDS(file="DSY_selected_datasets_FOI_R0.Rds")
-FOI_R0_dist_data=YEPaux::get_FOI_R0_dist_data(dataset)
+FOI_R0_dist_data=get_FOI_R0_dist_data(dataset)
 
 FOI_R0_dist_data[,c(3:8)]=FOI_R0_dist_data[,c(3:8)]*365.0 #Convert daily FOI to annual FOI
 regions_gadm=FOI_R0_dist_data$region
@@ -44,26 +44,26 @@ for(data_select in c(1,2,3,4,5)){
   FOI_values2=FOI_values[xref_index]
   R0_values2=R0_values[xref_index]
   
-  orderly2::orderly_artefact(description=paste0("Figures ",data_select), files=c(paste0("epi_map_FOI_",data_type,".png"),
-                                                                                 paste0("epi_map_R0_",data_type,".png")))
+  orderly_artefact(description=paste0("Figures ",data_select), files=c(paste0("epi_map_FOI_",data_type,".png"),
+                                                                       paste0("epi_map_R0_",data_type,".png")))
   
   #png(paste0("epi_map_FOI_",data_type,".png"),width=945.507,height=1440)
-  map_FOI=YEPaux::create_map(shape_data=shape_data,param_values=FOI_values2,text_size=5,
-                             display_axes=FALSE,border_colour_regions = "grey",
-                             scale_manual=scale_FOI,colour_scale_manual=colour_scale,
-                             pixels_max=1440,map_title=NULL,legend_title="Spillover FOI (annual)",
-                             legend_position=c(0.8,0.2),legend_format="e",legend_dp=1)
+  map_FOI=create_map(shape_data=shape_data,param_values=FOI_values2,text_size=5,
+                     display_axes=FALSE,border_colour_regions = "grey",
+                     scale_manual=scale_FOI,colour_scale_manual=colour_scale,
+                     pixels_max=1440,map_title=NULL,legend_title="Spillover FOI (annual)",
+                     legend_position=c(0.8,0.3),legend_format="e",legend_dp=1)
   map_FOI = map_FOI + theme(legend.key.size = unit(0.25, "cm"))
   #dev.off()
   ggsave(filename=paste0("epi_map_FOI_",data_type,".png"),plot=map_FOI,
          width=945.507,height=1440,units="px",bg="white")
   
   #png(paste0("epi_map_R0_",data_type,".png"),width=945.507,height=1440)
-  map_R0=YEPaux::create_map(shape_data=shape_data,param_values=R0_values2,text_size=5,
-                            display_axes=FALSE,border_colour_regions = "grey",
-                            scale_manual=scale_R0,colour_scale_manual=colour_scale,
-                            pixels_max=1440,map_title=NULL,legend_title="Basic rep. number",
-                            legend_position=c(0.8,0.15),legend_format="f",legend_dp=2)
+  map_R0=create_map(shape_data=shape_data,param_values=R0_values2,text_size=5,
+                    display_axes=FALSE,border_colour_regions = "grey",
+                    scale_manual=scale_R0,colour_scale_manual=colour_scale,
+                    pixels_max=1440,map_title=NULL,legend_title="Basic rep. number",
+                    legend_position=c(0.8,0.15),legend_format="f",legend_dp=2)
   map_R0 = map_R0 + theme(legend.key.size = unit(0.25, "cm"))
   ggsave(filename=paste0("epi_map_R0_",data_type,".png"),plot=map_R0,
          width=945.507,height=1440,units="px",bg="white")

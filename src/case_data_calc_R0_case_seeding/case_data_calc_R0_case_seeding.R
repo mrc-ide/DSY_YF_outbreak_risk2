@@ -10,7 +10,7 @@ orderly2::orderly_shared_resource("input_data.Rds"="input_data.Rds")
 
 orderly2::orderly_artefact(description="All data", files=c("case_data_seeded_R0_selected_datasets.Rds"))
 
-library(YEP)
+library(YEP) #Need to use YEP 2.0
 input_data=readRDS(file="input_data.Rds")
 FOI_R0_values=readRDS(file="DSY_selected_datasets_FOI_R0.Rds")
 assertthat::assert_that(all(FOI_R0_values$regions==input_data$region_labels))
@@ -39,7 +39,8 @@ n_years_input_required=c(1:length(input_data$years_labels))[input_data$years_lab
 input_data_reduced=list(region_labels=input_data$region_labels,years_labels=input_data$years_labels[n_years_input_required],
                         age_labels=input_data$age_labels,vacc_data=input_data$vacc_data[,n_years_input_required,],
                         pop_data=input_data$pop_data[,n_years_input_required,])
-case_template=data.frame(region=sort(rep(regions,n_years)),year=rep(years_data,n_regions),cases=rep(0,n_years*n_regions))
+case_template=data.frame(region=sort(rep(regions,n_years)),year=rep(years_data,n_regions),cases=rep(0,n_years*n_regions),
+                         deaths=rep(0,n_years*n_regions))
 
 mode_start=2
 start_SEIRV=list()
@@ -58,6 +59,7 @@ for(set in selection){
   dataset_single <- Generate_Dataset(FOI_values = array(0,dim=c(n_regions,1)),
                                      R0_values = array(FOI_R0_values$R0[set,,],dim=c(n_regions,1)),
                                      input_data_reduced,sero_template = NULL,case_template = case_template,
+                                     #template=list(sero=NULL,case=case_template), #For YEP 3.0
                                      vaccine_efficacy = additional_data$vaccine_efficacy[set], time_inc = time_inc, 
                                      mode_start = mode_start, start_SEIRV = start_SEIRV, mode_time = 0,
                                      n_reps = pars$n_reps,deterministic = pars$deterministic, 

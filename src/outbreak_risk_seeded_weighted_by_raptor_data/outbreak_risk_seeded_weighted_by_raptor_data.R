@@ -1,6 +1,6 @@
-pars = orderly2::orderly_parameters(raptor_results_filename="")
+pars = orderly2::orderly_parameters(calc_id="", raptor_results_filename="")
 
-orderly2::orderly_dependency(name="case_data_calc_R0_case_seeding",query="latest", #TODO - make query input parameter
+orderly2::orderly_dependency(name="case_data_calc_R0_case_seeding",query=pars$calc_id,
                              files=c("case_data_seeded_R0_selected_datasets.Rds"))
 
 orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefiles/DJI/gadm36_DJI_1.cpg', 

@@ -1,8 +1,10 @@
-orderly2::orderly_dependency(name="case_data_calc_R0_case_seeding",
-                             query="latest",
+pars = orderly_parameters(calc_id="latest")
+
+orderly_dependency(name="case_data_calc_R0_case_seeding",
+                             query=pars$calc_id,
                              c(case_data_seeded_R0_selected_datasets.Rds="case_data_seeded_R0_selected_datasets.Rds"))
 
-orderly2::orderly_artefact(description="Risk data frame", files=c("outbreak_risk (seeding+R0).csv"))
+orderly_artefact(description="Risk data frame", files=c("outbreak_risk (seeding+R0).csv"))
 
 case_data=readRDS(file="case_data_seeded_R0_selected_datasets.Rds")
 regions=unique(case_data$region)
