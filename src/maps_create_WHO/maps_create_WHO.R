@@ -45,7 +45,7 @@ outbreak_size_mean1=rowMeans(array(case_data$severe_cases,dim=c(n_regions_gadm,n
 secondary_infs_mean1=rowMeans(array(case_data$cases-1,dim=c(n_regions_gadm,n_param_sets)))
 attack_rate_mean2=secondary_infs_mean2=outbreak_size_mean2=rep(NA,n_regions_gadm)
 for(n_region in 1:n_regions_gadm){
-  subset=subset(case_data,region==regions[n_region])
+  subset=subset(case_data,region==regions_gadm[n_region])
   pts=subset$severe_cases>=1.0
   attack_rate_mean2[n_region]=mean(subset$attack_rates[pts])
   outbreak_size_mean2[n_region]=mean(subset$severe_cases[pts])

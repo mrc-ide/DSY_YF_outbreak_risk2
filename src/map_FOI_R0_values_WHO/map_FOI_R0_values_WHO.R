@@ -15,7 +15,7 @@ FOI_R0_dist_data=get_FOI_R0_dist_data(dataset)
 
 FOI_R0_dist_data[,c(3:8)]=FOI_R0_dist_data[,c(3:8)]*365.0 #Convert daily FOI to annual FOI
 regions_gadm=FOI_R0_dist_data$region
-country_list=unique(substr(regions,1,3))
+country_list=unique(substr(regions_gadm,1,3))
 
 shape_data=readRDS("shapefile_data_DSY_adm1.Rds")
 regions_who=shape_data$region
