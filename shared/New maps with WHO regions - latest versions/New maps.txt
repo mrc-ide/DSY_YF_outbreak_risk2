@@ -1,0 +1,11 @@
+New maps:
+
+Main text:
+	Figure 3: Map of outbreak propagation risk (DSY adm1)
+	*Figure 4: Map of relative outbreak risk adjusted for human movement data (DS adm2)
+
+Supplementary information:
+	Figure S3a: Map of spillover FOI (DSY adm1)
+	Figure S3b: Map of R0 (DSY adm1)
+	Figure S4: Violin plot of R0 (DSY adm1)
+	Figure S5: Map of mean outbreak size (DSY adm1), counterpart to Figure 3
