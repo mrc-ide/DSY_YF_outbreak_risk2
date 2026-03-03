@@ -2,14 +2,11 @@
 
 library(ggplot2)
 
-pars <- orderly2::orderly_parameters(query="latest")
+pars <- orderly2::orderly_parameters(epi_id="latest", xref_file = "")
 
 orderly2::orderly_dependency(name="get_FOI_R0_values_from_saved_chain_data", 
-                             query=pars$query,
+                             query=pars$epi_id,
                              files=c(DSY_selected_datasets_FOI_R0.Rds="DSY_selected_datasets_FOI_R0.Rds"))
-
-#Load new shape data and region cross-referencing table
-orderly_shared_resource('xref_adm1.Rds' = 'xref_adm1.Rds')
 
 orderly2::orderly_artefact(description="Plot", files=c("R0_violin.png"))
 
@@ -17,7 +14,7 @@ FOI_R0_values=readRDS(file="DSY_selected_datasets_FOI_R0.Rds")
 regions_gadm=FOI_R0_values$regions
 n_values=dim(FOI_R0_values$R0)[1]
 
-xref_table=readRDS("xref_adm1.Rds")
+xref_table=readRDS(pars$xref_file)
 regions_who=xref_table$WHO_Name
 n_regions=length(regions_who)
 #Create index to remap FOI/R0 values onto WHO regions

@@ -3,8 +3,8 @@
 library(YEPaux)
 library(ggplot2)
 
-pars = orderly2::orderly_parameters(case_id="latest",risk_id="latest",
-                                    risk_weighted_id="latest")
+pars = orderly2::orderly_parameters(case_id="latest",risk_id="latest",risk_weighted_id="latest",
+                                    shapefile1 = "", shapefile2 = "", xref_file1 = "", xref_file2 = "")
 
 orderly2::orderly_dependency(name="case_data_calc_R0_case_seeding",
                             query=pars$case_id,
@@ -15,13 +15,6 @@ orderly2::orderly_dependency(name="get_outbreak_risk_R0_case_seeding",
 orderly2::orderly_dependency(name="outbreak_risk_seeded_weighted_by_raptor_data",
                              query=pars$risk_weighted_id,
                              c("results_weighted_outbreak_risk.Rds"="results_weighted_outbreak_risk.Rds"))
-
-
-#Load new shape data and region cross-referencing tables
-orderly2::orderly_shared_resource('shapefile_data_DSY_adm1.Rds' = 'shapefile_data_DSY_adm1.Rds',
-                                  'shapefile_data_DSY_adm2.Rds' = 'shapefile_data_DSY_adm2.Rds',
-                                  'xref_adm1.Rds' = 'xref_adm1.Rds', 
-                                  'xref_adm2.Rds' = 'xref_adm2.Rds')
 
 orderly2::orderly_artefact(description="Mean attack rate map",
                            files=c("outbreak risk map (seeding+R0).png",
@@ -38,8 +31,8 @@ n_regions_gadm=length(regions_gadm)
 n_param_sets=nrow(case_data)/n_regions_gadm
 
 #Load WHO shapefile data and conversion table (adm1)
-shape_data=readRDS("shapefile_data_DSY_adm1.Rds")
-xref_table=readRDS("xref_adm1.Rds")
+shape_data=readRDS(pars$shapefile1)
+xref_table=readRDS(pars$xref_file1)
 regions_who=shape_data$region
 #Create index to remap FOI/R0 values onto WHO regions
 xref_index=rep(NA,length(regions_who))
@@ -80,7 +73,7 @@ scale_risk=c(0,0.01,0.05,0.1,0.25,0.5,0.75,0.9,0.95,1.0)
 map1=create_map(shape_data=shape_data,param_values=outbreak_risk_who,text_size=8,
                    display_axes=FALSE,border_colour_regions = "grey",
                    scale_manual=scale_risk,colour_scale_manual=colour_scale,
-                   pixels_max=1440,map_title=NULL,legend_title="Outbreak probability",
+                   map_title=NULL,legend_title="Outbreak probability",
                    legend_position=c(0.8,0.2),legend_format="f",legend_dp=2)
 map1 <- map1+ theme(legend.key.size = unit(0.25, "cm"))
 ggsave(filename="outbreak risk map (seeding+R0).png",plot=map1,
@@ -90,7 +83,7 @@ scale_ar=c(0,2.5e-6,5e-6,7.5e-6,1e-5,2.5e-5,5e-5,7.5e-5,1e-4,2.5e-4) #TODO - adj
 map2=create_map(shape_data=shape_data,param_values=attack_rate_mean1_who,text_size=8,
                 display_axes=FALSE,border_colour_regions = "grey",
                 scale_manual=scale_ar,colour_scale_manual=colour_scale,
-                pixels_max=1440,map_title=NULL,legend_title="Mean attack rate (all)",
+                map_title=NULL,legend_title="Mean attack rate (all)",
                 legend_position=c(0.8,0.2),legend_format="e",legend_dp=2)
 map2 <- map2+ theme(legend.key.size = unit(0.25, "cm"))
 ggsave(filename="mean attack rate (all) map (seeding+R0).png",plot=map2,
@@ -100,7 +93,7 @@ ggsave(filename="mean attack rate (all) map (seeding+R0).png",plot=map2,
 map3=create_map(shape_data=shape_data,param_values=attack_rate_mean2_who,text_size=8,
                 display_axes=FALSE,border_colour_regions = "grey",
                 scale_manual=scale_ar,colour_scale_manual=colour_scale,
-                pixels_max=1440,map_title=NULL,legend_title="Mean attack rate (outbreaks)",
+                map_title=NULL,legend_title="Mean attack rate (outbreaks)",
                 legend_position=c(0.8,0.2),legend_format="e",legend_dp=1)
 map3 <- map3+ theme(legend.key.size = unit(0.25, "cm"))
 ggsave(filename="mean attack rate (outbreaks) map (seeding+R0).png",plot=map3,
@@ -110,7 +103,7 @@ scale_si=c(0,1,2,3,4,5,10,25,50,100)
 map4=create_map(shape_data=shape_data,param_values=secondary_infs_mean1_who,text_size=8,
                 display_axes=FALSE,border_colour_regions = "grey",
                 scale_manual=scale_si,colour_scale_manual=colour_scale,
-                pixels_max=1440,map_title=NULL,legend_title="Mean secondary infections (all)",
+                map_title=NULL,legend_title="Mean secondary infections (all)",
                 legend_position=c(0.8,0.2),legend_format="f",legend_dp=2)
 map4 <- map4+ theme(legend.key.size = unit(0.25, "cm"))
 ggsave(filename="mean secondary infections (all) map (seeding+R0).png",plot=map4,
@@ -119,7 +112,7 @@ ggsave(filename="mean secondary infections (all) map (seeding+R0).png",plot=map4
 map5=create_map(shape_data=shape_data,param_values=secondary_infs_mean2_who,text_size=8,
                 display_axes=FALSE,border_colour_regions = "grey",
                 scale_manual=scale_si,colour_scale_manual=colour_scale,
-                pixels_max=1440,map_title=NULL,legend_title="Mean secondary infections (outbreaks)",
+                map_title=NULL,legend_title="Mean secondary infections (outbreaks)",
                 legend_position=c(0.8,0.2),legend_format="f",legend_dp=2)
 map5 <- map5+ theme(legend.key.size = unit(0.25, "cm"))
 ggsave(filename="mean secondary infections (outbreaks) map (seeding+R0).png",plot=map5,
@@ -129,7 +122,7 @@ scale_os=c(0,1,1.5,1.75,2,2.5,5,7.5,10,12.5)
 map6=create_map(shape_data=shape_data,param_values=outbreak_size_mean2_who,text_size=8,
                 display_axes=FALSE,border_colour_regions = "grey",
                 scale_manual=scale_os,colour_scale_manual=colour_scale,
-                pixels_max=1440,map_title=NULL,legend_title="Mean outbreak size",
+                map_title=NULL,legend_title="Mean outbreak size",
                 legend_position=c(0.8,0.2),legend_format="f",legend_dp=2)
 map6 <- map6+ theme(legend.key.size = unit(0.25, "cm"))
 ggsave(filename="mean outbreak size map (seeding+R0).png",plot=map6,
@@ -141,8 +134,8 @@ regions_gadm2 = risk_adj_data$adm2_regions
 risk_adjusted=risk_adj_data$rel_outbreak_risk_adm2_a #Based on rt_risk_scores_mean_adm2
 
 #Load WHO shapefile data and conversion table (adm2)
-shape_data2=readRDS("shapefile_data_DSY_adm2.Rds")
-xref_table2=readRDS("xref_adm2.Rds")
+shape_data2=readRDS(pars$shapefile2)
+xref_table2=readRDS(pars$xref_file2)
 regions_who2=shape_data2$region
 #Create index to remap FOI/R0 values onto WHO regions
 xref_index2=rep(NA,length(regions_who2))
@@ -159,7 +152,7 @@ scale_risk_adj=c(0,1e-4,1e-3,1e-2,3e-2,1e-1,3e-1,1,2,3)
 map7=create_map(shape_data=shape_data2,param_values=risk_adjusted2,text_size=8,
                 display_axes=FALSE,border_colour_regions = "grey",
                 scale_manual=scale_risk_adj,colour_scale_manual=colour_scale,
-                pixels_max=1440,map_title=NULL,legend_title="Adjusted outbreak risk",
+                map_title=NULL,legend_title="Adjusted outbreak risk",
                 legend_position=c(0.8,0.2),legend_format="f",legend_dp=2)
 legend_labels=c("Low",rep("",8),"High")
 n_intervals=length(scale_risk_adj)
