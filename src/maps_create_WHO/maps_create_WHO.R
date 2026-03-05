@@ -131,6 +131,7 @@ ggsave(filename="mean outbreak size map (seeding+R0).png",plot=map6,
 #Load adjusted risk rate map data-----------------------------------------------
 risk_adj_data = readRDS("results_weighted_outbreak_risk.Rds")
 regions_gadm2 = risk_adj_data$adm2_regions
+intro_risk=risk_adj_data$rt_risk_scores_mean_adm2
 risk_adjusted=risk_adj_data$rel_outbreak_risk_adm2_a #Based on rt_risk_scores_mean_adm2
 
 #Load WHO shapefile data and conversion table (adm2)
@@ -144,12 +145,36 @@ for(i in 1:length(regions_who2)){
   xref_index2[i]=which(regions_gadm2==xref_table2$GADM_ID[index2])
 }
 risk_adjusted2=risk_adjusted[xref_index2]
+intro_risk2=intro_risk[xref_index2]
 
-orderly2::orderly_artefact(description="Adjusted risk map", 
-                           files=c("adjusted relative outbreak risk map (seeding+R0).png"))
+orderly2::orderly_artefact(description="Human movement related risk", 
+                           files=c("mean introduction risk map.png",
+                                   "adjusted relative outbreak risk map (seeding+R0).png"))
+
+scale_intro=c(0,1e-3,3e-3,1e-2,3e-2,1e-1,3e-1,1,3,10)
+map7=create_map(shape_data=shape_data2,param_values=intro_risk2,text_size=8,
+                display_axes=FALSE,border_colour_regions = "grey",
+                scale_manual=scale_intro,colour_scale_manual=colour_scale,
+                map_title=NULL,legend_title="Introduction risk",
+                legend_position=c(0.8,0.2),legend_format="f",legend_dp=2)
+legend_labels=c("Low",rep("",8),"High")
+n_intervals=length(scale_intro)
+ratio=length(colour_scale)/n_intervals
+values=ratio*c(1:length(colour_scale))[c(1:n_intervals)]
+for(i in 1:n_intervals){values[i]=max(1, floor(values[i]))}
+palette_vector=colour_scale[values]
+map7 <- map7 + theme(legend.key.size = unit(0.25, "cm")) + scale_fill_manual(limits=as.character(scale_intro),
+                                                                             aesthetics="fill",
+                                                                             values=palette_vector,
+                                                                             breaks=scale_intro[c(1:n_intervals)],
+                                                                             na.value = "grey50",
+                                                                             labels=legend_labels)
+
+ggsave(filename="mean introduction risk map.png",plot=map7,
+       width=945.507,height=1440,units="px",bg="white")
 
 scale_risk_adj=c(0,1e-4,1e-3,1e-2,3e-2,1e-1,3e-1,1,2,3)
-map7=create_map(shape_data=shape_data2,param_values=risk_adjusted2,text_size=8,
+map8=create_map(shape_data=shape_data2,param_values=risk_adjusted2,text_size=8,
                 display_axes=FALSE,border_colour_regions = "grey",
                 scale_manual=scale_risk_adj,colour_scale_manual=colour_scale,
                 map_title=NULL,legend_title="Adjusted outbreak risk",
@@ -160,12 +185,12 @@ ratio=length(colour_scale)/n_intervals
 values=ratio*c(1:length(colour_scale))[c(1:n_intervals)]
 for(i in 1:n_intervals){values[i]=max(1, floor(values[i]))}
 palette_vector=colour_scale[values]
-map7 <- map7 + theme(legend.key.size = unit(0.25, "cm")) + scale_fill_manual(limits=as.character(scale_risk_adj),
+map8 <- map8 + theme(legend.key.size = unit(0.25, "cm")) + scale_fill_manual(limits=as.character(scale_risk_adj),
                                                                              aesthetics="fill",
                                                                              values=palette_vector,
                                                                              breaks=scale_risk_adj[c(1:n_intervals)],
                                                                              na.value = "grey50",
                                                                              labels=legend_labels)
 
-ggsave(filename="adjusted relative outbreak risk map (seeding+R0).png",plot=map7,
+ggsave(filename="adjusted relative outbreak risk map (seeding+R0).png",plot=map8,
        width=945.507,height=1440,units="px",bg="white")

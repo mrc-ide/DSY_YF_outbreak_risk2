@@ -3,29 +3,30 @@ pars = orderly2::orderly_parameters(calc_id="", raptor_results_filename="")
 orderly2::orderly_dependency(name="case_data_calc_R0_case_seeding",query=pars$calc_id,
                              files=c("case_data_seeded_R0_selected_datasets.Rds"))
 
-orderly2::orderly_shared_resource('shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefiles/DJI/gadm36_DJI_1.cpg', 
-                                  'shapefiles/DJI/gadm36_DJI_1.dbf' = 'shapefiles/DJI/gadm36_DJI_1.dbf', 
-                                  'shapefiles/DJI/gadm36_DJI_1.prj' = 'shapefiles/DJI/gadm36_DJI_1.prj', 
-                                  'shapefiles/DJI/gadm36_DJI_1.shp' = 'shapefiles/DJI/gadm36_DJI_1.shp', 
-                                  'shapefiles/DJI/gadm36_DJI_1.shx' = 'shapefiles/DJI/gadm36_DJI_1.shx', 
-                                  'shapefiles/SOM/gadm36_SOM_1.cpg' = 'shapefiles/SOM/gadm36_SOM_1.cpg', 
-                                  'shapefiles/SOM/gadm36_SOM_1.dbf' = 'shapefiles/SOM/gadm36_SOM_1.dbf', 
-                                  'shapefiles/SOM/gadm36_SOM_1.prj' = 'shapefiles/SOM/gadm36_SOM_1.prj',
-                                  'shapefiles/SOM/gadm36_SOM_1.shp' = 'shapefiles/SOM/gadm36_SOM_1.shp', 
-                                  'shapefiles/SOM/gadm36_SOM_1.shx' = 'shapefiles/SOM/gadm36_SOM_1.shx', 
-                                  
-                                  'shapefiles/DJI/gadm36_DJI_2.cpg' = 'shapefiles/DJI/gadm36_DJI_2.cpg', 
-                                  'shapefiles/DJI/gadm36_DJI_2.dbf' = 'shapefiles/DJI/gadm36_DJI_2.dbf', 
-                                  'shapefiles/DJI/gadm36_DJI_2.prj' = 'shapefiles/DJI/gadm36_DJI_2.prj', 
-                                  'shapefiles/DJI/gadm36_DJI_2.shp' = 'shapefiles/DJI/gadm36_DJI_2.shp', 
-                                  'shapefiles/DJI/gadm36_DJI_2.shx' = 'shapefiles/DJI/gadm36_DJI_2.shx', 
-                                  'shapefiles/SOM/gadm36_SOM_2.cpg' = 'shapefiles/SOM/gadm36_SOM_2.cpg', 
-                                  'shapefiles/SOM/gadm36_SOM_2.dbf' = 'shapefiles/SOM/gadm36_SOM_2.dbf', 
-                                  'shapefiles/SOM/gadm36_SOM_2.prj' = 'shapefiles/SOM/gadm36_SOM_2.prj',
-                                  'shapefiles/SOM/gadm36_SOM_2.shp' = 'shapefiles/SOM/gadm36_SOM_2.shp', 
-                                  'shapefiles/SOM/gadm36_SOM_2.shx' = 'shapefiles/SOM/gadm36_SOM_2.shx',
-                                  
-                                  "raptor_results.rds" = pars$raptor_results_filename)
+orderly2::orderly_shared_resource(
+  'shapefiles/DJI/gadm36_DJI_1.cpg' = 'shapefiles/DJI/gadm36_DJI_1.cpg', 
+  'shapefiles/DJI/gadm36_DJI_1.dbf' = 'shapefiles/DJI/gadm36_DJI_1.dbf', 
+  'shapefiles/DJI/gadm36_DJI_1.prj' = 'shapefiles/DJI/gadm36_DJI_1.prj', 
+  'shapefiles/DJI/gadm36_DJI_1.shp' = 'shapefiles/DJI/gadm36_DJI_1.shp', 
+  'shapefiles/DJI/gadm36_DJI_1.shx' = 'shapefiles/DJI/gadm36_DJI_1.shx', 
+  'shapefiles/SOM/gadm36_SOM_1.cpg' = 'shapefiles/SOM/gadm36_SOM_1.cpg', 
+  'shapefiles/SOM/gadm36_SOM_1.dbf' = 'shapefiles/SOM/gadm36_SOM_1.dbf', 
+  'shapefiles/SOM/gadm36_SOM_1.prj' = 'shapefiles/SOM/gadm36_SOM_1.prj',
+  'shapefiles/SOM/gadm36_SOM_1.shp' = 'shapefiles/SOM/gadm36_SOM_1.shp', 
+  'shapefiles/SOM/gadm36_SOM_1.shx' = 'shapefiles/SOM/gadm36_SOM_1.shx', 
+  
+  'shapefiles/DJI/gadm36_DJI_2.cpg' = 'shapefiles/DJI/gadm36_DJI_2.cpg', 
+  'shapefiles/DJI/gadm36_DJI_2.dbf' = 'shapefiles/DJI/gadm36_DJI_2.dbf', 
+  'shapefiles/DJI/gadm36_DJI_2.prj' = 'shapefiles/DJI/gadm36_DJI_2.prj', 
+  'shapefiles/DJI/gadm36_DJI_2.shp' = 'shapefiles/DJI/gadm36_DJI_2.shp', 
+  'shapefiles/DJI/gadm36_DJI_2.shx' = 'shapefiles/DJI/gadm36_DJI_2.shx', 
+  'shapefiles/SOM/gadm36_SOM_2.cpg' = 'shapefiles/SOM/gadm36_SOM_2.cpg', 
+  'shapefiles/SOM/gadm36_SOM_2.dbf' = 'shapefiles/SOM/gadm36_SOM_2.dbf', 
+  'shapefiles/SOM/gadm36_SOM_2.prj' = 'shapefiles/SOM/gadm36_SOM_2.prj',
+  'shapefiles/SOM/gadm36_SOM_2.shp' = 'shapefiles/SOM/gadm36_SOM_2.shp', 
+  'shapefiles/SOM/gadm36_SOM_2.shx' = 'shapefiles/SOM/gadm36_SOM_2.shx',
+  
+  "raptor_results.rds" = pars$raptor_results_filename)
 
 library(YEPaux)
 
@@ -81,6 +82,8 @@ for(n_adm2 in 1:n_adm2_regions){
 #TODO - save results for further use
 orderly2::orderly_artefact(description = "Output",files=c("results_weighted_outbreak_risk.Rds"))
 results_weighted_outbreak_risk = list(adm2_regions = adm2_regions,
+                                      rt_risk_scores_mean_adm2 = rt_risk_scores_mean_adm2,
+                                      rt_risk_scores_median_adm2 = rt_risk_scores_median_adm2,
                                       rel_outbreak_risk_adm2_a = rel_outbreak_risk_adm2_a,
                                       rel_outbreak_risk_adm2_b = rel_outbreak_risk_adm2_b)
 saveRDS(results_weighted_outbreak_risk,"results_weighted_outbreak_risk.Rds")
